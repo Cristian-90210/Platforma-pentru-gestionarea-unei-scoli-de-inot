@@ -1,0 +1,46 @@
+import React, { useState } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
+import { Header } from './Header';
+import { Footer } from './Footer';
+import { SideMenu } from '../components/SideMenu';
+import { GlobalSearch } from '../components/GlobalSearch';
+import { clsx } from 'clsx';
+
+export const MainLayout: React.FC = () => {
+    const location = useLocation();
+    const isDashboard = location.pathname === '/';
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+    return (
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col font-sans transition-colors duration-300">
+            <Header
+                onMenuClick={() => setIsMenuOpen(true)}
+                onSearchClick={() => setIsSearchOpen(true)}
+            />
+
+            <SideMenu
+                isOpen={isMenuOpen}
+                onClose={() => setIsMenuOpen(false)}
+            />
+
+            <GlobalSearch
+                isOpen={isSearchOpen}
+                onClose={() => setIsSearchOpen(false)}
+            />
+
+            {/* 
+                If Dashboard, content flows under the absolute header (for hero bg).
+                If other pages, we might want a spacer or a different background.
+            */}
+            <main className={clsx(
+                "flex-1 flex flex-col",
+                !isDashboard && "pt-24" // Spacer for non-hero pages
+            )}>
+                <Outlet />
+            </main>
+
+            <Footer />
+        </div>
+    );
+};

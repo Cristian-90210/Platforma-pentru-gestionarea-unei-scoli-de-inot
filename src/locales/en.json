@@ -1,0 +1,368 @@
+{
+    "header": {
+        "home": "HOME",
+        "courses": "COURSES",
+        "coaches": "COACHES",
+        "students": "STUDENTS",
+        "admin": "ADMIN",
+        "our_team": "OUR TEAM",
+        "dashboard": "DASHBOARD",
+        "login": "LOGIN",
+        "logout": "LOGOUT"
+    },
+    "hero": {
+        "platform_title": "Swimming School Platform",
+        "subtitle": "User Management • Course Progress • Licensed Coach Access",
+        "search_placeholder": "Search: courses, students or coaches...",
+        "search_button": "SEARCH NOW",
+        "levels": {
+            "beginner": "Beginner",
+            "intermediate": "Intermediate",
+            "advanced": "Advanced"
+        }
+    },
+    "landing": {
+        "why_choose": {
+            "title": "WHY ATLANTIS SWIM?",
+            "subtitle": "We offer top-notch facilities and a professional learning environment for all our students."
+        },
+        "services": {
+            "expert_coaches": {
+                "title": "Expert Coaches",
+                "desc": "Certified professionals dedicated to your success in the water."
+            },
+            "active_students": {
+                "title": "500+ Active Students",
+                "desc": "Join our community of passionate swimmers."
+            },
+            "diverse_courses": {
+                "title": "Diverse Courses",
+                "desc": "From beginner to advanced competitive levels."
+            }
+        },
+        "subscriptions": {
+            "title": "OUR SUBSCRIPTIONS",
+            "subtitle": "Choose the plan that fits your needs.",
+            "add_to_cart": "ADD TO CART",
+            "standard": "STANDARD",
+            "pro": "PRO",
+            "individual": "INDIVIDUAL",
+            "transport": "WITH TRANSPORT",
+            "sessions": "sessions"
+        },
+        "team": {
+            "title": "OUR TEAM",
+            "subtitle": "Our experienced coaches guide you every step of your swimming journey.",
+            "founder": "FOUNDER",
+            "founder_role": "FOUNDER / HEAD COACH",
+            "founder_bio_1": "Varnic Alexandru is the founder and head coach of our swimming school, with over 10 years of experience.",
+            "founder_bio_2": "Throughout his career, he has developed a unique teaching style focused on performance as well as the harmonious development of each student."
+        },
+        "cta": {
+            "title": "READY TO TAKE THE FIRST STEP?",
+            "subtitle": "Sign up today and discover the joy of swimming with our professional team.",
+            "button": "START NOW"
+        },
+        "plans": {
+            "plan1": {
+                "name": "4 Sessions Subscription",
+                "duration": "1 month"
+            },
+            "plan2": {
+                "name": "Standard 8 Sessions Subscription",
+                "duration": "1 month"
+            },
+            "plan3": {
+                "name": "Pro 12 Sessions Subscription",
+                "duration": "1 month"
+            },
+            "plan4": {
+                "name": "Standard 3 Months Subscription",
+                "duration": "3 months"
+            },
+            "plan5": {
+                "name": "Pro 3 Months Subscription",
+                "duration": "3 months"
+            },
+            "plan6": {
+                "name": "Individual 5 Sessions",
+                "duration": "individual"
+            },
+            "plan7": {
+                "name": "Individual 10 Sessions",
+                "duration": "individual"
+            },
+            "plan8": {
+                "name": "Subscription with Transport Chisinau",
+                "duration": "1 month"
+            },
+            "plan9": {
+                "name": "Subscription with Transport Ialoveni",
+                "duration": "1 month"
+            }
+        }
+    },
+    "roles": {
+        "student": "Student",
+        "coach": "Coach",
+        "admin": "Admin"
+    },
+    "coaches": {
+        "c1": {
+            "specialization": "Manager"
+        },
+        "c2": {
+            "specialization": "Swimming Coach"
+        },
+        "c3": {
+            "specialization": "Swimming Coach"
+        },
+        "c4": {
+            "specialization": "Swimming Coach"
+        },
+        "c5": {
+            "specialization": "Swimming Coach"
+        },
+        "c6": {
+            "specialization": "Swimming Coach"
+        }
+    },
+    "language": {
+        "en": "English",
+        "ro": "Română",
+        "ru": "Русский"
+    },
+    "login": {
+        "welcome_back": "Welcome Back",
+        "subtitle": "Sign in to access your dashboard",
+        "sign_in_to": "Sign in to your",
+        "email_placeholder": "Email Address",
+        "password_placeholder": "Password",
+        "sign_in_button": "SIGN IN",
+        "signing_in": "Signing In...",
+        "forgot_password": "Forgot Password?",
+        "secure_note": "Secure • Encrypted • Private"
+    },
+    "courses": {
+        "crs1": {
+            "title": "Beginner Swim - Kids",
+            "description": "Learn the basics of floating and kicking.",
+            "level": "Beginner"
+        },
+        "crs2": {
+            "title": "Advanced Freestyle",
+            "description": "Refine your technique for competition.",
+            "level": "Advanced"
+        },
+        "crs3": {
+            "title": "Backstroke Mastery",
+            "description": "Perfect your backstroke form.",
+            "level": "Intermediate"
+        }
+    },
+    "student_dashboard": {
+        "welcome": "Welcome, {{name}}",
+        "subtitle": "Manage your swimming journey and upcoming sessions.",
+        "stats": {
+            "upcoming_sessions": "Upcoming Sessions",
+            "student_level": "Student Level",
+            "next_session": "Next Session",
+            "no_upcoming": "No upcoming sessions",
+            "book_new": "BOOK NEW"
+        },
+        "my_bookings": "My Bookings",
+        "no_bookings": "You haven't booked any sessions yet.",
+        "browse_courses": "Browse Courses",
+        "quick_actions": "Quick Actions",
+        "actions": {
+            "browse_all": "Browse All Courses",
+            "browse_all_desc": "Find the perfect swimming class for you.",
+            "meet_coaches": "Meet Our Coaches",
+            "meet_coaches_desc": "Learn about our certified trainers.",
+            "mark_absent": "Mark Absent"
+        },
+        "tabs": {
+            "bookings": "Bookings",
+            "attendance": "Attendance",
+            "results": "Results",
+            "recovery": "Recovery",
+            "messages": "Messages"
+        },
+        "attendance": {
+            "title": "Attendance History",
+            "present": "Present",
+            "absent": "Absent",
+            "recovery": "Recovery",
+            "no_records": "No attendance records found.",
+            "booking": "Booking"
+        },
+        "results": {
+            "title": "My Results",
+            "headers": {
+                "date": "Date",
+                "style": "Style",
+                "distance": "Distance",
+                "time": "Time"
+            },
+            "no_results": "No results found."
+        },
+        "recovery": {
+            "title": "Recovery Sessions",
+            "session": "Recovery session",
+            "no_sessions": "No recovery sessions scheduled."
+        },
+        "messages": {
+            "title": "Messages",
+            "no_messages": "No messages.",
+            "placeholder": "Type a message...",
+            "send": "Send"
+        }
+    },
+    "coach_dashboard": {
+        "welcome": "Welcome, Coach {{name}}",
+        "subtitle": "Manage training schedule and student progress.",
+        "stats": {
+            "todays_sessions": "Today's Sessions",
+            "active_students": "Active Students",
+            "upcoming_classes": "Upcoming Classes",
+            "recovery": "Recoveries",
+            "total_results": "Total Results"
+        },
+        "training_schedule": "Training Schedule",
+        "table": {
+            "time": "Time",
+            "student": "Student",
+            "course": "Course",
+            "status": "Status",
+            "action": "Action"
+        },
+        "attendance": {
+            "title": "Mark Attendance",
+            "present": "Present",
+            "absent": "Absent",
+            "recovery": "Recovery",
+            "action": {
+                "mark_present": "Present",
+                "mark_absent": "Absent",
+                "mark_recovery": "Recovery"
+            }
+        },
+        "results": {
+            "add_title": "Add / Edit Result",
+            "save": "Save",
+            "all_results": "All Results"
+        },
+        "messages": {
+            "title": "Parent Communication",
+            "placeholder": "Write a message..."
+        },
+        "recovery": {
+            "title": "Students for Recovery",
+            "no_students": "No students for recovery."
+        },
+        "individual": {
+            "title": "Individual Sessions",
+            "no_sessions": "No individual sessions."
+        },
+        "count": {
+            "title": "Child Count per Hour (From Bookings)",
+            "week_schedule": "Weekly Schedule Occupancy",
+            "headers": {
+                "day": "Day",
+                "interval": "Interval",
+                "students_max": "Students / Max",
+                "occupancy": "Occupancy"
+            }
+        },
+        "tabs": {
+            "schedule": "Training Schedule",
+            "attendance": "Attendance",
+            "results": "Results",
+            "messages": "Parent Communication",
+            "recovery": "Recovery",
+            "individual": "Individual",
+            "count": "Child Count/Hour"
+        }
+    },
+    "admin_dashboard": {
+        "welcome": "Admin Dashboard",
+        "subtitle": "System Overview & Configuration",
+        "stats": {
+            "total_students": "Total Students",
+            "active_coaches": "Active Coaches",
+            "active_courses": "Active Courses",
+            "monthly_revenue": "Monthly Revenue"
+        },
+        "quick_management": "Quick Management",
+        "manage_students": "Manage Students",
+        "manage_coaches": "Manage Coaches",
+        "system_notifications": "System Notifications",
+        "platform_config": "Platform Configuration",
+        "maintenance_mode": "Maintenance Mode",
+        "allow_registration": "Allow New Registrations",
+        "update_platform": "Update Platform"
+    },
+    "footer": {
+        "brand_description": "Professional swimming training for all ages. Join our community today and master the art of swimming with certified experts.",
+        "quick_links": "Quick Links",
+        "links": {
+            "courses": "Courses",
+            "coaches": "Coaches",
+            "students": "Students",
+            "schedule": "Schedule",
+            "admin": "Admin"
+        },
+        "contact_us": "Contact Us",
+        "address": "123 Aqua Boulevard, Swimming District, Water City, 500210",
+        "rights_reserved": "© {{year}} SwimSchool Platform. All rights reserved.",
+        "privacy_policy": "Privacy Policy",
+        "terms_of_service": "Terms of Service",
+        "cookie_policy": "Cookie Policy"
+    },
+    "courses_page": {
+        "title": "AVAILABLE",
+        "title_highlight": "COURSES",
+        "subtitle": "Browse our complete catalog of swimming programs designed for all skill levels.",
+        "month": "/month",
+        "students_enrolled": "{{enrolled}} / {{capacity}} Students",
+        "coach": "Coach: {{name}}",
+        "select_course": "Select Course"
+    },
+    "coaches_page": {
+        "title": "EXPERT",
+        "title_highlight": "COACHES",
+        "subtitle": "Meet the professionals dedicated to helping you achieve your swimming goals."
+    },
+    "students_page": {
+        "title": "REGISTERED",
+        "title_highlight": "STUDENTS",
+        "subtitle": "Complete directory of all students enrolled in the swimming school.",
+        "level": "Level",
+        "age": "Age",
+        "progress": "Progress",
+        "view_profile": "View Profile"
+    },
+    "enrollment_modal": {
+        "enroll_in": "Enroll in {{course}}",
+        "step_1_title": "Select a Coach",
+        "step_2_title": "Choose Date & Time",
+        "step_3_title": "Confirm Enrollment",
+        "confirm_subtitle": "Please review your booking details.",
+        "course": "Course",
+        "coach": "Coach",
+        "date": "Date",
+        "time": "Time",
+        "cancel": "Cancel",
+        "back": "Back",
+        "next": "Next",
+        "confirm_booking": "Confirm Booking",
+        "processing": "Processing...",
+        "success_title": "Enrollment Successful!",
+        "success_message": "You have successfully enrolled in {{course}}.",
+        "close": "Close"
+    },
+    "map": {
+        "school_name": "SwimSchool - Education Center",
+        "address": "Bulevardul Aqua 123, Orașul Apei"
+    }
+}

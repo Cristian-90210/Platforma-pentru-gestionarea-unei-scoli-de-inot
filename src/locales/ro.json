@@ -1,0 +1,368 @@
+{
+    "header": {
+        "home": "ACASĂ",
+        "courses": "CURSURI",
+        "coaches": "ANTRENORI",
+        "students": "ELEVI",
+        "admin": "ADMIN",
+        "our_team": "ECHIPA NOASTRĂ",
+        "dashboard": "DASHBOARD",
+        "login": "AUTENTIFICARE",
+        "logout": "DECONECTARE"
+    },
+    "hero": {
+        "platform_title": "Școală de înot – Platformă",
+        "subtitle": "Management Utilizatori • Progres Cursuri • Acces Antrenori Licențiați",
+        "search_placeholder": "Caută: cursuri, elevi sau antrenori...",
+        "search_button": "CAUTĂ ACUM",
+        "levels": {
+            "beginner": "Începător",
+            "intermediate": "Intermediar",
+            "advanced": "Avansat"
+        }
+    },
+    "landing": {
+        "why_choose": {
+            "title": "DE CE ATLANTIS SWIM?",
+            "subtitle": "Oferim facilități de top și un mediu de învățare profesionist pentru toți elevii noștri."
+        },
+        "services": {
+            "expert_coaches": {
+                "title": "Antrenori Experți",
+                "desc": "Profesioniști certificați dedicați succesului tău în apă."
+            },
+            "active_students": {
+                "title": "500+ Elevi Activi",
+                "desc": "Alătură-te comunității noastre de înotători pasionați."
+            },
+            "diverse_courses": {
+                "title": "Cursuri Diverse",
+                "desc": "De la începător la nivel avansat competitiv."
+            }
+        },
+        "subscriptions": {
+            "title": "ABONAMENTELE NOASTRE",
+            "subtitle": "Alege planul care se potrivește nevoilor tale.",
+            "add_to_cart": "ADAUGĂ ÎN COȘ",
+            "standard": "STANDARD",
+            "pro": "PRO",
+            "individual": "INDIVIDUAL",
+            "transport": "CU TRANSPORT",
+            "sessions": "ședințe"
+        },
+        "team": {
+            "title": "ECHIPA NOASTRĂ",
+            "subtitle": "Antrenorii noștri experimentați te ghidează la fiecare pas al călătoriei tale în apă.",
+            "founder": "FONDATOR",
+            "founder_role": "FONDATOR / ANTRENOR PRINCIPAL",
+            "founder_bio_1": "Varnic Alexandru este fondatorul și antrenorul principal al școlii noastre de înot, cu o experiență de peste 10 ani în domeniu.",
+            "founder_bio_2": "De-a lungul carierei, și-a format un stil unic de predare, axat pe performanță, dar și pe dezvoltarea armonioasă a fiecărui elev. Pasiunea și profesionalismul lui Alexandru stau la baza rezultatelor."
+        },
+        "cta": {
+            "title": "PREGĂTIT SĂ FACI PRIMUL PAS?",
+            "subtitle": "Înscrie-te astăzi și descoperă bucuria înotului alături de echipa noastră profesionistă.",
+            "button": "ÎNCEPE ACUM"
+        },
+        "plans": {
+            "plan1": {
+                "name": "Abonament 4 Frecvențe",
+                "duration": "1 lună"
+            },
+            "plan2": {
+                "name": "Abonament Standard 8 Frecvențe",
+                "duration": "1 lună"
+            },
+            "plan3": {
+                "name": "Abonament Pro 12 Frecvențe",
+                "duration": "1 lună"
+            },
+            "plan4": {
+                "name": "Abonament Standard 3 Luni",
+                "duration": "3 luni"
+            },
+            "plan5": {
+                "name": "Abonament Pro 3 Luni",
+                "duration": "3 luni"
+            },
+            "plan6": {
+                "name": "Abonament Individual 5 Antrenamente",
+                "duration": "individual"
+            },
+            "plan7": {
+                "name": "Abonament Individual 10 Antrenamente",
+                "duration": "individual"
+            },
+            "plan8": {
+                "name": "Abonament cu Transport Chișinău",
+                "duration": "1 lună"
+            },
+            "plan9": {
+                "name": "Abonament cu Transport Ialoveni",
+                "duration": "1 lună"
+            }
+        }
+    },
+    "roles": {
+        "student": "Elev",
+        "coach": "Antrenor",
+        "admin": "Admin"
+    },
+    "coaches": {
+        "c1": {
+            "specialization": "Manager"
+        },
+        "c2": {
+            "specialization": "Antrenor Înot"
+        },
+        "c3": {
+            "specialization": "Antrenor Înot"
+        },
+        "c4": {
+            "specialization": "Antrenor Înot"
+        },
+        "c5": {
+            "specialization": "Antrenor Înot"
+        },
+        "c6": {
+            "specialization": "Antrenor Înot"
+        }
+    },
+    "language": {
+        "en": "English",
+        "ro": "Română",
+        "ru": "Русский"
+    },
+    "login": {
+        "welcome_back": "Bine ai revenit",
+        "subtitle": "Conectează-te pentru a accesa panoul de control",
+        "sign_in_to": "Conectează-te în",
+        "email_placeholder": "Adresă de Email",
+        "password_placeholder": "Parolă",
+        "sign_in_button": "AUTENTIFICARE",
+        "signing_in": "Se conectează...",
+        "forgot_password": "Ai uitat parola?",
+        "secure_note": "Securizat • Criptat • Privat"
+    },
+    "courses": {
+        "crs1": {
+            "title": "Înot Începători - Copii",
+            "description": "Învață bazele plutirii și loviturilor de picioare.",
+            "level": "Începător"
+        },
+        "crs2": {
+            "title": "Stil Liber Avansat",
+            "description": "Rafinează-ți tehnica pentru competiții.",
+            "level": "Avansat"
+        },
+        "crs3": {
+            "title": "Măiestrie Spate",
+            "description": "Perfecționează-ți stilul spate.",
+            "level": "Intermediar"
+        }
+    },
+    "student_dashboard": {
+        "welcome": "Bine ai venit, {{name}}",
+        "subtitle": "Gestionează progresul înotului tău și sesiunile viitoare.",
+        "stats": {
+            "upcoming_sessions": "Sesiuni Viitoare",
+            "student_level": "Nivel Elev",
+            "next_session": "Următoarea Sesiune",
+            "no_upcoming": "Nicio sesiune viitoare",
+            "book_new": "REZERVĂ NOU"
+        },
+        "my_bookings": "Rezervările Mele",
+        "no_bookings": "Nu ai rezervat nicio sesiune încă.",
+        "browse_courses": "Răsfoiește Cursuri",
+        "quick_actions": "Acțiuni Rapide",
+        "actions": {
+            "browse_all": "Vezi Toate Cursurile",
+            "browse_all_desc": "Găsește cursul de înot perfect pentru tine.",
+            "meet_coaches": "Cunoaște Antrenorii",
+            "meet_coaches_desc": "Află mai multe despre antrenorii noștri certificați.",
+            "mark_absent": "Absență"
+        },
+        "tabs": {
+            "bookings": "Programări",
+            "attendance": "Prezență",
+            "results": "Rezultate",
+            "recovery": "Recuperări",
+            "messages": "Mesaje"
+        },
+        "attendance": {
+            "title": "Istoric Prezență",
+            "present": "Prezent",
+            "absent": "Absent",
+            "recovery": "Recuperare",
+            "no_records": "Nu există înregistrări de prezență.",
+            "booking": "Programare"
+        },
+        "results": {
+            "title": "Rezultatele Mele",
+            "headers": {
+                "date": "Data",
+                "style": "Stil",
+                "distance": "Distanță",
+                "time": "Timp"
+            },
+            "no_results": "Nu există rezultate înregistrate."
+        },
+        "recovery": {
+            "title": "Sesiuni de Recuperare",
+            "session": "Sesiune de recuperare",
+            "no_sessions": "Nu există sesiuni de recuperare programate."
+        },
+        "messages": {
+            "title": "Mesaje",
+            "no_messages": "Nu există mesaje.",
+            "placeholder": "Scrie un mesaj...",
+            "send": "Trimite"
+        }
+    },
+    "coach_dashboard": {
+        "welcome": "Bine ai venit, Antrenor {{name}}",
+        "subtitle": "Gestionează programul de antrenament și progresul elevilor.",
+        "stats": {
+            "todays_sessions": "Sesiunile de Azi",
+            "active_students": "Elevi Activi",
+            "upcoming_classes": "Clase Următoare",
+            "recovery": "Recuperări",
+            "total_results": "Rezultate Totale"
+        },
+        "training_schedule": "Program Antrenament",
+        "table": {
+            "time": "Oră",
+            "student": "Elev",
+            "course": "Curs",
+            "status": "Status",
+            "action": "Acțiune"
+        },
+        "attendance": {
+            "title": "Marchează Prezența",
+            "present": "Prezent",
+            "absent": "Absent",
+            "recovery": "Recuperare",
+            "action": {
+                "mark_present": "Prezent",
+                "mark_absent": "Absent",
+                "mark_recovery": "Recuperare"
+            }
+        },
+        "results": {
+            "add_title": "Adaugă / Modifică Rezultat",
+            "save": "Salvează",
+            "all_results": "Toate Rezultatele"
+        },
+        "messages": {
+            "title": "Comunicare Părinți",
+            "placeholder": "Scrie un mesaj..."
+        },
+        "recovery": {
+            "title": "Elevi la Recuperare",
+            "no_students": "Nu există elevi la recuperare."
+        },
+        "individual": {
+            "title": "Sesiuni Individuale",
+            "no_sessions": "Nu există sesiuni individuale."
+        },
+        "count": {
+            "title": "Număr Copii per Oră (Din Programări)",
+            "week_schedule": "Ocupare Orar Săptămânal",
+            "headers": {
+                "day": "Zi",
+                "interval": "Interval",
+                "students_max": "Elevi / Max",
+                "occupancy": "Ocupare"
+            }
+        },
+        "tabs": {
+            "schedule": "Program Antrenament",
+            "attendance": "Prezență",
+            "results": "Rezultate",
+            "messages": "Comunicare Părinți",
+            "recovery": "Recuperări",
+            "individual": "Individual",
+            "count": "Nr. Copii/Oră"
+        }
+    },
+    "admin_dashboard": {
+        "welcome": "Panou Administrator",
+        "subtitle": "Prezentare Generală Sistem & Configurare",
+        "stats": {
+            "total_students": "Total Elevi",
+            "active_coaches": "Antrenori Activi",
+            "active_courses": "Cursuri Active",
+            "monthly_revenue": "Venit Lunar"
+        },
+        "quick_management": "Management Rapid",
+        "manage_students": "Administrează Elevi",
+        "manage_coaches": "Administrează Antrenori",
+        "system_notifications": "Notificări Sistem",
+        "platform_config": "Configurare Platformă",
+        "maintenance_mode": "Mod Mentenanță",
+        "allow_registration": "Permite Înregistrări Noi",
+        "update_platform": "Actualizează Platforma"
+    },
+    "footer": {
+        "brand_description": "Antrenamente profesionale de înot pentru toate vârstele. Alătură-te comunității noastre astăzi și stăpânește arta înotului alături de experți certificați.",
+        "quick_links": "Link-uri Rapide",
+        "links": {
+            "courses": "Cursuri",
+            "coaches": "Antrenori",
+            "students": "Elevi",
+            "schedule": "Program",
+            "admin": "Admin"
+        },
+        "contact_us": "Contactează-ne",
+        "address": "Bulevardul Aqua 123, Cartierul Înot, Orașul Apei, 500210",
+        "rights_reserved": "© {{year}} Platforma SwimSchool. Toate drepturile rezervate.",
+        "privacy_policy": "Politica de Confidențialitate",
+        "terms_of_service": "Termeni și Condiții",
+        "cookie_policy": "Politica Cookie"
+    },
+    "courses_page": {
+        "title": "CURSURI",
+        "title_highlight": "DISPONIBILE",
+        "subtitle": "Răsfoiește catalogul nostru complet de programe de înot concepute pentru toate nivelurile.",
+        "month": "/lună",
+        "students_enrolled": "{{enrolled}} / {{capacity}} Elevi",
+        "coach": "Antrenor: {{name}}",
+        "select_course": "Selectează Cursul"
+    },
+    "coaches_page": {
+        "title": "ANTRENORI",
+        "title_highlight": "EXPERȚI",
+        "subtitle": "Cunoaște profesioniștii dedicați să te ajute să îți atingi obiectivele de înot."
+    },
+    "students_page": {
+        "title": "ELEVI",
+        "title_highlight": "ÎNREGISTRAȚI",
+        "subtitle": "Director complet al tuturor elevilor înscriși la școala de înot.",
+        "level": "Nivel",
+        "age": "Vârstă",
+        "progress": "Progres",
+        "view_profile": "Vezi Profil"
+    },
+    "enrollment_modal": {
+        "enroll_in": "Înscriere la {{course}}",
+        "step_1_title": "Selectează un Antrenor",
+        "step_2_title": "Alege Data și Ora",
+        "step_3_title": "Confirmă Înscrierea",
+        "confirm_subtitle": "Te rugăm să verifici detaliile rezervării.",
+        "course": "Curs",
+        "coach": "Antrenor",
+        "date": "Dată",
+        "time": "Oră",
+        "cancel": "Anulează",
+        "back": "Înapoi",
+        "next": "Următorul",
+        "confirm_booking": "Confirmă Rezervarea",
+        "processing": "Se procesează...",
+        "success_title": "Înscriere Reușită!",
+        "success_message": "Te-ai înscris cu succes la {{course}}.",
+        "close": "Închide"
+    },
+    "map": {
+        "school_name": "SwimSchool – Școală de Înot",
+        "address": "Bulevardul Aqua 123, Orașul Apei"
+    }
+}
