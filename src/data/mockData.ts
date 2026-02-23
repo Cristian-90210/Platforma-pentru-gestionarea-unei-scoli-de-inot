@@ -1,4 +1,4 @@
-import type { User, Student, Coach, Course, SwimmingResult, AttendanceRecord, Message, Subscription, CoachScheduleSlot, StudentNote } from '../types';
+import type { User, Student, Coach, Course, SwimmingResult, AttendanceRecord, Message, Subscription, CoachScheduleSlot, SpecialOffer, StudentNote } from '../types';
 
 export interface MockUserAccount extends User {
     password: string;
@@ -371,6 +371,10 @@ export const mockCoachSchedule: CoachScheduleSlot[] = [
     { id: 'sch7', coachId: 'c3', coachName: 'Ion Ionescu', dayOfWeek: 'Saturday', startTime: '10:00', endTime: '12:00', maxStudents: 12, currentStudents: 11 },
 ];
 
+export const mockSpecialOffers: SpecialOffer[] = [
+    { id: 'off1', studentId: 's1', studentName: 'Andrei Popa', title: 'Reducere Abonament Martie', description: '20% reducere la reînnoire abonament luna martie.', discount: 20, validUntil: '2026-03-15', sentBy: 'admin-1', sentDate: '2026-02-15' },
+    { id: 'off2', studentId: 's3', studentName: 'Mihai Voicu', title: 'Sesiune Gratuită', description: 'O sesiune gratuită de recuperare.', discount: 100, validUntil: '2026-02-28', sentBy: 'admin-1', sentDate: '2026-02-14' },
+];
 
 export const mockStudentNotes: StudentNote[] = [
     { id: 'n1', studentId: 's1', studentName: 'Andrei Popa', content: 'Are nevoie de atenție suplimentară la tehnica de respirație.', authorId: 'admin-1', authorName: 'Super Admin', createdAt: '2026-02-10T10:00:00' },
