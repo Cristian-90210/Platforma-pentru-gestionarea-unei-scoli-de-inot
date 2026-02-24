@@ -3,6 +3,7 @@ import { Modal } from './Modal';
 import { Calendar } from './Calendar';
 import { CoachSelector } from './CoachSelector';
 import { Button } from './Button';
+import { CTAButton } from './CTAButton';
 import { mockCoaches } from '../data/mockData';
 import type { Course } from '../types';
 import { CheckCircle } from 'lucide-react';
@@ -120,17 +121,17 @@ export const EnrollmentModal: React.FC<EnrollmentModalProps> = ({ course, isOpen
                 )}
 
                 {step < 3 ? (
-                    <Button
+                    <CTAButton
                         onClick={handleNext}
-                        variant="gradient"
+                        fullWidth={false}
                         disabled={(step === 1 && (!selectedDate || !selectedTime)) || (step === 2 && !selectedCoachId)}
                     >
                         {t('enrollment_modal.next')}
-                    </Button>
+                    </CTAButton>
                 ) : (
-                    <Button onClick={onClose} variant="gradient" className="bg-green-500 hover:bg-green-600 border-none">
+                    <CTAButton onClick={onClose} fullWidth={false} style={{ borderRadius: '9999px', background: 'linear-gradient(145deg, #22c55e 0%, #16a34a 100%)', minHeight: '44px' }}>
                         {t('enrollment_modal.confirm_booking')}
-                    </Button>
+                    </CTAButton>
                 )}
             </div>
         </Modal>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/Button';
+import { CTAButton } from '../components/CTAButton';
 import { ShieldAlert } from 'lucide-react';
 
 export const Forbidden: React.FC = () => {
@@ -19,9 +20,9 @@ export const Forbidden: React.FC = () => {
                 <Button onClick={() => navigate(-1)} variant="secondary" className="rounded-full px-6 text-gray-600">
                     Go Back
                 </Button>
-                <Button onClick={() => navigate('/')} variant="gradient" className="rounded-full px-6">
+                <CTAButton fullWidth={false} onClick={() => navigate('/')}>
                     Go Home
-                </Button>
+                </CTAButton>
             </div>
         </div>
     );

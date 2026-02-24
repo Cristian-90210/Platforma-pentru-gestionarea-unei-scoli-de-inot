@@ -22,7 +22,7 @@ export const Button: React.FC<ButtonProps> = ({
     disabled,
     ...props
 }) => {
-    const baseStyles = 'inline-flex items-center justify-center rounded-sm font-bold uppercase tracking-wide transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none transform active:scale-95';
+    const baseStyles = 'inline-flex items-center justify-center rounded-full font-bold uppercase tracking-wide transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none transform active:scale-95';
 
     const variants = {
         primary: 'bg-host-cyan text-white hover:bg-cyan-600 shadow-md hover:shadow-lg',

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '../components/Button';
+import { CTAButton } from '../components/CTAButton';
 import { AlertTriangle } from 'lucide-react';
 
 export const NotFound: React.FC = () => {
@@ -14,9 +14,9 @@ export const NotFound: React.FC = () => {
             <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-md">
                 The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
             </p>
-            <Button onClick={() => navigate('/')} variant="gradient" className="rounded-full px-8">
+            <CTAButton fullWidth={false} onClick={() => navigate('/')}>
                 Go Home
-            </Button>
+            </CTAButton>
         </div>
     );
 };

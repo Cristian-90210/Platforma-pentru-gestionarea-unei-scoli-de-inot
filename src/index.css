@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global pill-shaped button override — applies to ALL buttons */
+button,
+[type="submit"],
+[type="button"],
+[role="button"],
+.btn-pill {
+  border-radius: 9999px !important;
+}
+
 @layer base {
   html {
     font-family: 'Inter', system-ui, sans-serif;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card } from '../components/Card';
-import { Button } from '../components/Button';
+import { CTAButton } from '../components/CTAButton';
 import { PageHeader } from '../components/PageHeader';
 import { Table, TableRow } from '../components/TableRow';
 import type { Student } from '../types';
@@ -127,9 +127,9 @@ export const Students: React.FC = () => {
                     </div>
                     {isAdmin && (
                         <div className="mt-4 md:mt-0 w-full md:w-auto flex justify-end">
-                            <Button variant="gradient" onClick={() => { resetForm(); setShowForm(!showForm); }} className="rounded-full shadow-lg text-sm px-6">
+                            <CTAButton fullWidth={false} onClick={() => { resetForm(); setShowForm(!showForm); }}>
                                 {showForm ? <><X className="w-4 h-4 mr-2" /> {t('enrollment_modal.cancel')}</> : <><Plus className="w-4 h-4 mr-2" /> Add Student</>}
-                            </Button>
+                            </CTAButton>
                         </div>
                     )}
                 </div>
@@ -191,9 +191,9 @@ export const Students: React.FC = () => {
                                     </div>
                                 </div>
                                 <div className="flex justify-end pt-2">
-                                    <Button type="submit" variant="gradient" className="rounded-full px-8">
+                                    <CTAButton type="submit" fullWidth={false}>
                                         {editingId ? 'Update Student' : 'Save Enrollment'}
-                                    </Button>
+                                    </CTAButton>
                                 </div>
                             </form>
                         </Card>
