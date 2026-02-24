@@ -147,8 +147,9 @@ export const Login: React.FC = () => {
                         <button
                             type="submit"
                             disabled={isLoading}
+                            style={{ borderRadius: '9999px' }}
                             className={clsx(
-                                "w-full py-4 text-lg font-bold uppercase tracking-wider text-white rounded-xl shadow-xl transition-all duration-300 transform relative overflow-hidden group",
+                                "btn-pill w-full py-4 text-lg font-bold uppercase tracking-wider text-white shadow-xl transition-all duration-300 transform relative overflow-hidden group",
                                 "bg-gradient-to-r from-host-cyan to-blue-600 hover:shadow-cyan-500/40 hover:scale-[1.02] active:scale-[0.98]",
                                 isLoading && "opacity-80 cursor-wait"
                             )}

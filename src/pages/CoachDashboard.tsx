@@ -144,16 +144,16 @@ export const CoachDashboard: React.FC = () => {
                 </div>
 
                 {/* Tab Navigation */}
-                <div className="border-b border-gray-200 dark:border-gray-700 flex space-x-4 overflow-x-auto mb-8">
+                <div className="flex flex-wrap gap-3 overflow-x-auto mb-8 pb-2">
                     {tabs.map(tab => (
                         <button
                             key={tab.key}
                             onClick={() => setActiveTab(tab.key)}
                             className={clsx(
-                                "pb-3 text-sm font-bold uppercase tracking-wide border-b-2 transition-colors whitespace-nowrap",
+                                "px-5 py-2.5 text-sm font-bold uppercase tracking-wider transition-all duration-200 whitespace-nowrap",
                                 activeTab === tab.key
-                                    ? "border-host-cyan text-host-cyan"
-                                    : "border-transparent text-gray-400 hover:text-gray-600"
+                                    ? "bg-host-cyan text-white shadow-lg shadow-cyan-500/25"
+                                    : "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-700 dark:hover:text-gray-200"
                             )}
                         >
                             {tab.label}
@@ -399,12 +399,13 @@ export const CoachDashboard: React.FC = () => {
                                 <div className="p-12 text-center text-gray-500">{t('coach_dashboard.messages.no_messages')}</div>
                             )}
                         </div>
-                        <div className="p-4 border-t border-gray-100 dark:border-gray-700">
-                            <div className="flex items-center space-x-3">
+                        <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800/80">
+                            <div className="flex items-center gap-3">
                                 <select
                                     value={selectedParent}
                                     onChange={e => setSelectedParent(e.target.value)}
-                                    className="rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-sm p-2 outline-none focus:ring-1 focus:ring-host-cyan dark:text-white"
+                                    className="border-none bg-gray-200 dark:bg-gray-700/80 text-sm px-5 py-2.5 outline-none focus:ring-2 focus:ring-host-cyan/30 text-gray-700 dark:text-white font-semibold transition-all duration-200 cursor-pointer appearance-none"
+                                    style={{ borderRadius: '9999px' }}
                                 >
                                     {mockStudents.map(s => (
                                         <option key={s.id} value={s.id}>Părinte {s.name}</option>
@@ -416,11 +417,12 @@ export const CoachDashboard: React.FC = () => {
                                     onChange={e => setNewMessage(e.target.value)}
                                     onKeyDown={e => e.key === 'Enter' && handleSendMessage()}
                                     placeholder={t('coach_dashboard.messages.placeholder')}
-                                    className="flex-1 rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-sm p-2 outline-none focus:ring-1 focus:ring-host-cyan dark:text-white"
+                                    className="flex-1 border-none bg-gray-200 dark:bg-gray-700/80 text-sm px-5 py-2.5 outline-none focus:ring-2 focus:ring-host-cyan/30 text-gray-700 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all duration-200"
+                                    style={{ borderRadius: '9999px' }}
                                 />
                                 <button
                                     onClick={handleSendMessage}
-                                    className="p-2 bg-host-cyan text-white rounded-lg hover:bg-host-blue transition-colors"
+                                    className="p-2.5 bg-host-cyan text-white hover:bg-host-blue transition-all duration-200 hover:scale-105 active:scale-95 flex-shrink-0"
                                 >
                                     <Send size={18} />
                                 </button>

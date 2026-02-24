@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Hero } from '../components/Hero';
-import { Button } from '../components/Button';
+import { CTAButton } from '../components/CTAButton';
 import { subscriptionPlans, mockCoaches } from '../data/mockData';
 import { Users, GraduationCap, Trophy, Mail, Star, Twitter, Linkedin } from 'lucide-react';
 
@@ -149,10 +149,10 @@ export const Landing: React.FC = () => {
                                             </div>
 
                                             {/* Button */}
-                                            <button onClick={() => navigate('/login')} className="w-full bg-gradient-to-r from-host-blue to-host-cyan text-white font-bold py-3 px-6 rounded-xl hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 flex items-center justify-center space-x-2 text-sm uppercase tracking-wide">
-                                                <span>🛒</span>
+                                            <CTAButton onClick={() => navigate('/login')}>
+                                                <span className="mr-2">🛒</span>
                                                 <span>{t('landing.subscriptions.add_to_cart')}</span>
-                                            </button>
+                                            </CTAButton>
                                         </div>
                                     </div>
                                 </div>
@@ -327,9 +327,9 @@ export const Landing: React.FC = () => {
                         <p className="text-blue-100/80 text-lg mb-8 leading-relaxed">
                             {t('landing.cta.subtitle')}
                         </p>
-                        <Button variant="gradient" className="rounded-full px-10 py-4 text-lg shadow-2xl shadow-cyan-500/30 hover:shadow-cyan-500/50 transition-shadow" onClick={() => navigate('/login')}>
+                        <CTAButton fullWidth={false} onClick={() => navigate('/login')}>
                             {t('landing.cta.button')}
-                        </Button>
+                        </CTAButton>
                     </div>
                 </div>
             </div>

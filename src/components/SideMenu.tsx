@@ -108,7 +108,8 @@ export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
                         <NavLink
                             to="/login"
                             onClick={onClose}
-                            className="flex items-center justify-center w-full bg-host-gradient text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-cyan-500/20 transition-all"
+                            style={{ borderRadius: '9999px' }}
+                            className="btn-pill flex items-center justify-center w-full bg-host-gradient text-white font-bold py-3 shadow-lg hover:shadow-cyan-500/20 transition-all"
                         >
                             {t('header.login')}
                         </NavLink>
