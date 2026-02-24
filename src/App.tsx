@@ -19,6 +19,7 @@ import { UsersManagement } from './pages/admin/Users';
 import { Reservations } from './pages/admin/Reservations';
 import { Announcements } from './pages/admin/Announcements';
 import { Login } from './pages/Login';
+import { CartPage } from './pages/Cart';
 import { NotFound } from './pages/NotFound';
 import { Unauthorized } from './pages/Unauthorized';
 import { Forbidden } from './pages/Forbidden';
@@ -41,70 +42,71 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: strin
 
 function App() {
   return (
-    <ThemeProvider>
-      <CartProvider>
-        <AuthProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/404" element={<NotFound />} />
-              <Route path="/401" element={<Unauthorized />} />
-              <Route path="/403" element={<Forbidden />} />
+      <ThemeProvider>
+        <CartProvider>
+          <AuthProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/404" element={<NotFound />} />
+                <Route path="/401" element={<Unauthorized />} />
+                <Route path="/403" element={<Forbidden />} />
 
-              {/* Public Landing Page */}
-              <Route path="/" element={<MainLayout />}>
-                <Route index element={<Landing />} />
+                {/* Public Landing Page */}
+                <Route path="/" element={<MainLayout />}>
+                  <Route index element={<Landing />} />
 
-                <Route path="student" element={
-                  <ProtectedRoute allowedRoles={['student']}>
-                    <StudentDashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="coach" element={
-                  <ProtectedRoute allowedRoles={['coach']}>
-                    <CoachDashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="admin" element={
-                  <ProtectedRoute allowedRoles={['admin']}>
-                    <AdminProfile />
-                  </ProtectedRoute>
-                } />
+                  <Route path="student" element={
+                    <ProtectedRoute allowedRoles={['student']}>
+                      <StudentDashboard />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="coach" element={
+                    <ProtectedRoute allowedRoles={['coach']}>
+                      <CoachDashboard />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="admin" element={
+                    <ProtectedRoute allowedRoles={['admin']}>
+                      <AdminProfile />
+                    </ProtectedRoute>
+                  } />
 
-                {/* Admin Management Routes */}
-                <Route path="admin/users" element={
-                  <ProtectedRoute allowedRoles={['admin']}>
-                    <UsersManagement />
-                  </ProtectedRoute>
-                } />
-                <Route path="admin/reservations" element={
-                  <ProtectedRoute allowedRoles={['admin']}>
-                    <Reservations />
-                  </ProtectedRoute>
-                } />
-                <Route path="admin/announcements" element={
-                  <ProtectedRoute allowedRoles={['admin']}>
-                    <Announcements />
-                  </ProtectedRoute>
-                } />
+                  {/* Admin Management Routes */}
+                  <Route path="admin/users" element={
+                    <ProtectedRoute allowedRoles={['admin']}>
+                      <UsersManagement />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="admin/reservations" element={
+                    <ProtectedRoute allowedRoles={['admin']}>
+                      <Reservations />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="admin/announcements" element={
+                    <ProtectedRoute allowedRoles={['admin']}>
+                      <Announcements />
+                    </ProtectedRoute>
+                  } />
 
-                <Route path="courses" element={<Courses />} />
-                <Route path="coaches" element={<Coaches />} />
+                  <Route path="courses" element={<Courses />} />
+                  <Route path="coaches" element={<Coaches />} />
+                  <Route path="cart" element={<CartPage />} />
 
-                {/* Admin Only Routes */}
-                <Route path="students" element={
-                  <ProtectedRoute allowedRoles={['admin', 'coach']}>
-                    <Students />
-                  </ProtectedRoute>
-                } />
-              </Route>
+                  {/* Admin Only Routes */}
+                  <Route path="students" element={
+                    <ProtectedRoute allowedRoles={['admin', 'coach']}>
+                      <Students />
+                    </ProtectedRoute>
+                  } />
+                </Route>
 
-              <Route path="*" element={<Navigate to="/404" replace />} />
-            </Routes>
-          </BrowserRouter>
-        </AuthProvider>
-      </CartProvider>
-    </ThemeProvider>
+                <Route path="*" element={<Navigate to="/404" replace />} />
+              </Routes>
+            </BrowserRouter>
+          </AuthProvider>
+        </CartProvider>
+      </ThemeProvider>
   );
 }
 
