@@ -7,6 +7,7 @@ import { clsx } from 'clsx';
 
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
 import { Button } from '../components/Button';
+import { CTAButton } from '../components/CTAButton';
 import { useTranslation } from 'react-i18next';
 import { useCart } from '../context/CartContext';
 
@@ -90,9 +91,9 @@ const CartIcon: React.FC = () => {
                                 <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Total:</span>
                                 <span className="text-xl font-extrabold text-host-cyan">{totalPrice} MDL</span>
                             </div>
-                            <button className="w-full py-2.5 bg-gradient-to-r from-host-cyan to-blue-600 text-white font-bold text-sm rounded-xl hover:shadow-lg hover:shadow-cyan-500/30 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
+                            <CTAButton>
                                 Finalizează Comanda
-                            </button>
+                            </CTAButton>
                         </div>
                     )}
                 </div>

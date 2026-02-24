@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '../components/Button';
+import { CTAButton } from '../components/CTAButton';
 import { Lock } from 'lucide-react';
 
 export const Unauthorized: React.FC = () => {
@@ -15,9 +15,9 @@ export const Unauthorized: React.FC = () => {
             <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-md">
                 You must be logged in to access this page. Please sign in with your credentials.
             </p>
-            <Button onClick={() => navigate('/login')} variant="gradient" className="rounded-full px-8">
+            <CTAButton fullWidth={false} onClick={() => navigate('/login')}>
                 Go to Login
-            </Button>
+            </CTAButton>
         </div>
     );
 };

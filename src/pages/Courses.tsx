@@ -1,5 +1,6 @@
 import React from 'react';
 import { PageHeader } from '../components/PageHeader';
+import { CTAButton } from '../components/CTAButton';
 import { subscriptionPlans } from '../data/mockData';
 import { Clock, Tag, Zap, Car, User, ShoppingCart, Check } from 'lucide-react';
 import { useCart } from '../context/CartContext';
@@ -82,24 +83,26 @@ export const Courses: React.FC = () => {
                                     </div>
 
                                     {/* Add to cart button */}
-                                    <button
+                                    <CTAButton
                                         onClick={() => addItem({
                                             id: plan.id,
                                             name: plan.name,
                                             price: plan.price,
                                             discountPrice: plan.discountPrice ?? undefined,
                                         })}
-                                        className={`mt-4 w-full flex items-center justify-center space-x-2 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${items.some(i => i.id === plan.id)
-                                            ? 'bg-green-500 text-white shadow-lg shadow-green-500/30'
-                                            : 'bg-gradient-to-r from-host-cyan to-blue-600 text-white hover:shadow-lg hover:shadow-cyan-500/30 hover:scale-[1.02] active:scale-[0.98]'
-                                            }`}
+                                        style={items.some(i => i.id === plan.id) ? {
+                                            borderRadius: '9999px',
+                                            background: 'linear-gradient(145deg, #22c55e 0%, #16a34a 100%)',
+                                            minHeight: '44px',
+                                        } : undefined}
+                                        className="mt-4"
                                     >
                                         {items.some(i => i.id === plan.id) ? (
-                                            <><Check size={16} /><span>Adăugat în coș ({items.find(i => i.id === plan.id)?.quantity})</span></>
+                                            <><Check size={16} className="mr-2" /><span>Adăugat în coș ({items.find(i => i.id === plan.id)?.quantity})</span></>
                                         ) : (
-                                            <><ShoppingCart size={16} /><span>Adaugă în coș</span></>
+                                            <><ShoppingCart size={16} className="mr-2" /><span>ADD TO CART</span></>
                                         )}
-                                    </button>
+                                    </CTAButton>
                                 </div>
                             );
                         })}

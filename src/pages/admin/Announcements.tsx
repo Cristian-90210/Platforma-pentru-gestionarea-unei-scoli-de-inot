@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card } from '../../components/Card';
-import { Button } from '../../components/Button';
+import { CTAButton } from '../../components/CTAButton';
 import { PageHeader } from '../../components/PageHeader';
 import { announcementService } from '../../services/api';
 import { Send, Globe, Users } from 'lucide-react';
@@ -66,8 +66,8 @@ export const Announcements: React.FC = () => {
                                             type="button"
                                             onClick={() => setActiveTab(lang as any)}
                                             className={`pb-2 text-sm font-bold uppercase tracking-wide border-b-2 transition-colors ${activeTab === lang
-                                                    ? 'border-host-cyan text-host-cyan'
-                                                    : 'border-transparent text-gray-400 hover:text-gray-600'
+                                                ? 'border-host-cyan text-host-cyan'
+                                                : 'border-transparent text-gray-400 hover:text-gray-600'
                                                 }`}
                                         >
                                             {lang === 'en' ? 'English' : lang === 'ro' ? 'Română' : 'Русский'}
@@ -106,9 +106,9 @@ export const Announcements: React.FC = () => {
                                 </div>
 
                                 <div className="pt-4 flex justify-end">
-                                    <Button type="submit" variant="gradient" className="rounded-full shadow-lg px-8 py-3">
+                                    <CTAButton type="submit" fullWidth={false}>
                                         <Send className="w-4 h-4 mr-2" /> Broadcast Now
-                                    </Button>
+                                    </CTAButton>
                                 </div>
                             </form>
                         </Card>
