@@ -88,7 +88,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, onSearchClick }) =>
         ];
 
     return (
-        <header className={`fixed inset-x-0 top-0 z-40 transition-all duration-300 bg-white dark:bg-[#0f2027] border-b border-gray-200/50 dark:border-gray-800/50 shadow-sm ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
+        <header className={`fixed inset-x-0 top-0 z-40 transition-all duration-300 bg-white/80 dark:bg-[#0f2027]/70 backdrop-blur-xl border-b border-gray-200/30 dark:border-white/5 shadow-sm ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
             <nav className="container mx-auto px-6 py-4">
                 <div className="flex items-center">
 
