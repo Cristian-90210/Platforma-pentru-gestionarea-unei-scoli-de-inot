@@ -1,4 +1,8 @@
-import type { Student, Coach, Course, SwimmingResult, AttendanceRecord, Message, Subscription, CoachScheduleSlot, SpecialOffer, StudentNote } from '../types';
+import type { User, Student, Coach, Course, SwimmingResult, AttendanceRecord, Message, Subscription, CoachScheduleSlot, SpecialOffer, StudentNote } from '../types';
+
+export interface MockUserAccount extends User {
+    password: string;
+}
 
 export const mockCoaches: Coach[] = [
     {
@@ -376,4 +380,85 @@ export const mockStudentNotes: StudentNote[] = [
     { id: 'n1', studentId: 's1', studentName: 'Andrei Popa', content: 'Are nevoie de atenție suplimentară la tehnica de respirație.', authorId: 'admin-1', authorName: 'Super Admin', createdAt: '2026-02-10T10:00:00' },
     { id: 'n2', studentId: 's2', studentName: 'Elena Dumitru', content: 'Pregătire pentru competiția regională din martie.', authorId: 'admin-1', authorName: 'Super Admin', createdAt: '2026-02-12T14:30:00' },
     { id: 'n3', studentId: 's4', studentName: 'Ioana Stan', content: 'Părinții solicită program flexibil din cauza școlii.', authorId: 'admin-1', authorName: 'Super Admin', createdAt: '2026-02-13T09:00:00' },
+];
+
+// ─── MOCK USER ACCOUNTS (email + parolă pentru login) ───────────────────────
+export const mockUserAccounts: MockUserAccount[] = [
+    // ── ELEVI ──
+    {
+        id: 'user-1',
+        name: 'Andrei Popov',
+        email: 'andrei.popov@student.md',
+        password: 'elev1234',
+        role: 'student',
+        avatar: 'https://ui-avatars.com/api/?background=0ea5e9&color=fff&name=Andrei+Popov',
+    },
+    {
+        id: 'user-2',
+        name: 'Elena Dumitru',
+        email: 'elena.dumitru@student.md',
+        password: 'elev1234',
+        role: 'student',
+        avatar: 'https://ui-avatars.com/api/?background=0ea5e9&color=fff&name=Elena+Dumitru',
+    },
+    {
+        id: 'user-3',
+        name: 'Mihai Voicu',
+        email: 'mihai.voicu@student.md',
+        password: 'elev1234',
+        role: 'student',
+        avatar: 'https://ui-avatars.com/api/?background=0ea5e9&color=fff&name=Mihai+Voicu',
+    },
+
+    // ── ANTRENORI ──
+    {
+        id: 'c1',
+        name: 'Cătălina Moraru',
+        email: 'catalina@atlantisswim.md',
+        password: 'antrenor1234',
+        role: 'coach',
+        avatar: 'https://atlantisswim.md/wp-content/uploads/2025/08/1755805148272508-1152x1536.jpg',
+    },
+    {
+        id: 'c2',
+        name: 'Cătălin Ciobanu',
+        email: 'catalin@atlantisswim.md',
+        password: 'antrenor1234',
+        role: 'coach',
+        avatar: 'https://atlantisswim.md/wp-content/uploads/2025/08/1755608849746448-1152x1536.jpg',
+    },
+    {
+        id: 'c3',
+        name: 'Alexandru Rusu',
+        email: 'alexandru@atlantisswim.md',
+        password: 'antrenor1234',
+        role: 'coach',
+        avatar: 'https://atlantisswim.md/wp-content/uploads/2025/08/1755805146956334-1152x1536.jpg',
+    },
+
+    // ── ADMINISTRATORI ──
+    {
+        id: 'admin-1',
+        name: 'Super Admin',
+        email: 'admin@school.com',
+        password: 'admin1234',
+        role: 'admin',
+        avatar: 'https://ui-avatars.com/api/?background=7c3aed&color=fff&name=Super+Admin',
+    },
+    {
+        id: 'admin-2',
+        name: 'Director Ionescu',
+        email: 'director@school.com',
+        password: 'admin1234',
+        role: 'admin',
+        avatar: 'https://ui-avatars.com/api/?background=7c3aed&color=fff&name=Director+Ionescu',
+    },
+    {
+        id: 'admin-3',
+        name: 'Manager Stancu',
+        email: 'manager@school.com',
+        password: 'admin1234',
+        role: 'admin',
+        avatar: 'https://ui-avatars.com/api/?background=7c3aed&color=fff&name=Manager+Stancu',
+    },
 ];

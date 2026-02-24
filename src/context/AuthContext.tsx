@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useState } from 'react';
-import type { User, UserRole } from '../types';
+import type { User } from '../types';
+import { mockUserAccounts } from '../data/mockData';
 
 interface AuthContextType {
     user: User | null;
-    login: (role: UserRole) => void;
+    login: (email: string, password: string) => boolean;
     logout: () => void;
     isAuthenticated: boolean;
     isAdmin: boolean;
@@ -17,16 +18,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return saved ? JSON.parse(saved) : null;
     });
 
-    const login = (role: UserRole) => {
-        const mockUser: User = {
-            id: role === 'admin' ? 'admin-1' : role === 'coach' ? 'c1' : 'user-1',
-            name: role === 'admin' ? 'Admin User' : role === 'coach' ? 'Coach Alex' : 'Regular Student',
-            email: role === 'admin' ? 'admin@school.com' : role === 'coach' ? 'coach@school.com' : 'student@school.com',
-            role: role,
-            avatar: 'https://ui-avatars.com/api/?background=00c6ff&color=fff&name=' + (role === 'admin' ? 'Admin' : role === 'coach' ? 'Coach' : 'Student'),
-        };
-        setUser(mockUser);
-        localStorage.setItem('user', JSON.stringify(mockUser));
+    const login = (email: string, password: string): boolean => {
+        const account = mockUserAccounts.find(
+            (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
+        );
+        if (!account) return false;
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { password: _pw, ...safeUser } = account;
+        setUser(safeUser);
+        localStorage.setItem('user', JSON.stringify(safeUser));
+        return true;
     };
 
     const logout = () => {
