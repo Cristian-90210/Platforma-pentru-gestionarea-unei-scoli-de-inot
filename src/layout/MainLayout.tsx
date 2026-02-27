@@ -13,7 +13,7 @@ export const MainLayout: React.FC = () => {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col font-sans transition-colors duration-300">
+        <div className="min-h-screen bg-white dark:bg-gray-900 flex flex-col font-sans transition-colors duration-300">
             <Header
                 onMenuClick={() => setIsMenuOpen(true)}
                 onSearchClick={() => setIsSearchOpen(true)}

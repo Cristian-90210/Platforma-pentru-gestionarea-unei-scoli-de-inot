@@ -52,7 +52,7 @@ export const Landing: React.FC = () => {
             <Hero />
 
             {/* Services / Why Choose Section */}
-            <div className="py-20 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-800">
+            <div className="py-20 bg-white dark:bg-gray-800">
                 <div className="container mx-auto px-6">
                     <div className="scroll-reveal reveal-up text-center mb-16">
                         <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-4 uppercase tracking-wide">
@@ -163,7 +163,7 @@ export const Landing: React.FC = () => {
             </div>
 
             {/* Team / Coaches Section */}
-            <div className="py-20 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-800">
+            <div className="py-20 bg-white dark:bg-gray-800">
                 <div className="container mx-auto px-6">
                     <div className="scroll-reveal reveal-up text-center mb-16">
                         <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-4 uppercase tracking-wide">
