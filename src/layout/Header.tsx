@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { Menu, Sun, Moon, LogOut, Search, LogIn, ShoppingCart } from 'lucide-react';
@@ -39,6 +39,13 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, onSearchClick }) =>
     const { t } = useTranslation();
     const { user, logout } = useAuth();
     const { theme, toggleTheme } = useTheme();
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const navigateAndScroll = (to: string) => {
+        navigate(to);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
     // Scroll-based hide/show
     const [hidden, setHidden] = React.useState(false);
@@ -93,7 +100,10 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, onSearchClick }) =>
                 <div className="flex items-center">
 
                     {/* Left: Logo */}
-                    <div className="flex items-center flex-1">
+                    <div
+                        className="flex items-center flex-1 cursor-pointer"
+                        onClick={() => navigateAndScroll('/')}
+                    >
                         <img src="https://atlantisswim.md/wp-content/uploads/2025/08/cropped-asat-03-scaled-1-e1755890850322.png" alt="Atlantis SwimSchool" className="h-10 w-10 mr-2 object-contain" />
                         <span className="text-2xl font-extrabold text-gray-900 dark:text-white tracking-wider">
                             ATLANTIS <span className="text-host-cyan">SWIMSCHOOL</span>
@@ -102,28 +112,27 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, onSearchClick }) =>
 
                     {/* Center: Navigation Links */}
                     <div className="hidden lg:flex items-center justify-center space-x-8">
-                        {navItems.map((item) => (
-                            <NavLink
-                                key={item.to}
-                                to={item.to}
-                                className={({ isActive }) => clsx(
-                                    "text-sm font-bold uppercase tracking-wide transition-colors duration-200 relative py-1",
-                                    isActive
-                                        ? "text-host-cyan"
-                                        : "text-gray-700 dark:text-gray-300 hover:text-host-cyan"
-                                )}
-                            >
-                                {({ isActive }) => (
-                                    <>
-                                        {item.label}
-                                        <span className={clsx(
-                                            "absolute bottom-0 left-0 w-full h-0.5 bg-host-cyan transform origin-left transition-transform duration-300",
-                                            isActive ? "scale-x-100" : "scale-x-0"
-                                        )} />
-                                    </>
-                                )}
-                            </NavLink>
-                        ))}
+                        {navItems.map((item) => {
+                            const isActive = location.pathname === item.to;
+                            return (
+                                <button
+                                    key={item.to}
+                                    onClick={() => navigateAndScroll(item.to)}
+                                    className={clsx(
+                                        "text-sm font-bold uppercase tracking-wide transition-colors duration-200 relative py-1 bg-transparent border-none cursor-pointer",
+                                        isActive
+                                            ? "text-host-cyan"
+                                            : "text-gray-700 dark:text-gray-300 hover:text-host-cyan"
+                                    )}
+                                >
+                                    {item.label}
+                                    <span className={clsx(
+                                        "absolute bottom-0 left-0 w-full h-0.5 bg-host-cyan transform origin-left transition-transform duration-300",
+                                        isActive ? "scale-x-100" : "scale-x-0"
+                                    )} />
+                                </button>
+                            );
+                        })}
                     </div>
 
                     {/* Right: Actions */}
@@ -155,7 +164,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, onSearchClick }) =>
                             </div>
                         ) : (
                             <Button
-                                onClick={() => window.location.href = '/login'}
+                                onClick={() => navigateAndScroll('/login')}
                                 className="flex items-center gap-2 px-6 py-2 rounded-full bg-host-cyan hover:bg-cyan-500 text-white font-bold text-sm uppercase tracking-wide shadow-sm hover:shadow-md transition-all duration-200 border-none"
                             >
                                 <LogIn className="w-4 h-4" />
