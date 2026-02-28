@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 
 export interface CartItem {
     id: string;
@@ -18,10 +18,27 @@ interface CartContextType {
     totalPrice: number;
 }
 
+const CART_STORAGE_KEY = 'atlantis_cart';
+
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+// Încarcă coșul salvat din localStorage (sau [] dacă nu există / e corupt)
+function loadCartFromStorage(): CartItem[] {
+    try {
+        const raw = localStorage.getItem(CART_STORAGE_KEY);
+        return raw ? (JSON.parse(raw) as CartItem[]) : [];
+    } catch {
+        return [];
+    }
+}
+
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [items, setItems] = useState<CartItem[]>([]);
+    const [items, setItems] = useState<CartItem[]>(loadCartFromStorage);
+
+    // Sincronizează automat cu localStorage la fiecare schimbare
+    useEffect(() => {
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+    }, [items]);
 
     const addItem = useCallback((item: Omit<CartItem, 'quantity'>) => {
         setItems(prev => {
@@ -47,6 +64,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const clearCart = useCallback(() => {
         setItems([]);
+        localStorage.removeItem(CART_STORAGE_KEY);
     }, []);
 
     const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
