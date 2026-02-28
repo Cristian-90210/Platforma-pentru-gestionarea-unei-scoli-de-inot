@@ -5,8 +5,7 @@ import { PageHeader } from '../../components/PageHeader';
 import { Table, TableRow } from '../../components/TableRow';
 import type { AnyUser } from '../../types';
 import { userService } from '../../services/api';
-import { Search, CheckCircle, XCircle, Download } from 'lucide-react';
-import { exportToCSV } from '../../utils/csvExport';
+import { Search, CheckCircle, XCircle } from 'lucide-react';
 
 export const UsersManagement: React.FC = () => {
     const [users, setUsers] = useState<AnyUser[]>([]);
@@ -62,43 +61,19 @@ export const UsersManagement: React.FC = () => {
                                     className={`px-4 py-2 rounded-full text-sm font-bold uppercase transition-colors ${filterRole === role
                                         ? 'bg-host-cyan text-white shadow-md'
                                         : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600'
-                                    }`}
+                                        }`}
                                 >
                                     {role}
                                 </button>
                             ))}
                         </div>
-                        <div className="flex items-center gap-3">
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    placeholder="Search users..."
-                                    className="pl-10 pr-4 py-2 rounded-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-1 focus:ring-host-cyan outline-none"
-                                />
-                                <Search className="absolute left-3 top-2.5 text-gray-400 w-4 h-4" />
-                            </div>
-                            <button
-                                onClick={() => exportToCSV(
-                                    filteredUsers.map(u => {
-                                        const parts = u.name.trim().split(' ');
-                                        const prenume = parts[0] ?? '';
-                                        const nume = parts.slice(1).join(' ') ?? '';
-                                        return {
-                                            ID: u.id,
-                                            Prenume: prenume,
-                                            Nume: nume,
-                                            'Adresa Email': u.email,
-                                            Rol: u.role,
-                                            Status: (u as any).status ?? 'Active',
-                                        };
-                                    }),
-                                    `utilizatori_${filterRole}`
-                                )}
-                                className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-bold transition-all duration-200 shadow-sm hover:shadow-md"
-                            >
-                                <Download size={15} />
-                                Export CSV
-                            </button>
+                        <div className="relative">
+                            <input
+                                type="text"
+                                placeholder="Search users..."
+                                className="pl-10 pr-4 py-2 rounded-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-1 focus:ring-host-cyan outline-none"
+                            />
+                            <Search className="absolute left-3 top-2.5 text-gray-400 w-4 h-4" />
                         </div>
                     </div>
 
@@ -120,7 +95,7 @@ export const UsersManagement: React.FC = () => {
                                     <td className="px-6 py-4">
                                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium uppercase
                                             ${user.role === 'admin' ? 'bg-purple-100 text-purple-800' :
-                                            user.role === 'coach' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}`}>
+                                                user.role === 'coach' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}`}>
                                             {user.role}
                                         </span>
                                     </td>
