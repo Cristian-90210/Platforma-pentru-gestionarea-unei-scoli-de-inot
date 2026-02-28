@@ -216,6 +216,15 @@
             "no_messages": "No messages.",
             "placeholder": "Type a message...",
             "send": "Send"
+        },
+        "subscription": {
+            "title": "My Subscription",
+            "sessions_remaining": "Sessions Remaining",
+            "valid_until": "Valid Until",
+            "status_active": "ACTIVE",
+            "paid_on": "Paid on",
+            "no_subscription": "No active subscription.",
+            "browse_plans": "Browse Plans"
         }
     },
     "coach_dashboard": {

@@ -353,12 +353,12 @@ export const mockMessages: Message[] = [
 ];
 
 export const mockSubscriptions: Subscription[] = [
-    { id: 'sub1', studentId: 's1', studentName: 'Andrei Popa', paidDate: '2026-02-01', amount: 250, sessionsTotal: 12, sessionsUsed: 5, expiryDate: '2026-03-01' },
-    { id: 'sub2', studentId: 's2', studentName: 'Elena Dumitru', paidDate: '2026-02-01', amount: 400, sessionsTotal: 16, sessionsUsed: 10, expiryDate: '2026-03-01' },
-    { id: 'sub3', studentId: 's3', studentName: 'Mihai Voicu', paidDate: '2026-01-15', amount: 300, sessionsTotal: 8, sessionsUsed: 8, expiryDate: '2026-02-15' },
-    { id: 'sub4', studentId: 's4', studentName: 'Ioana Stan', paidDate: '2026-02-05', amount: 250, sessionsTotal: 12, sessionsUsed: 3, expiryDate: '2026-03-05' },
-    { id: 'sub5', studentId: 's5', studentName: 'George Enescu', paidDate: '2026-02-10', amount: 400, sessionsTotal: 16, sessionsUsed: 2, expiryDate: '2026-03-10' },
-    { id: 'sub6', studentId: 'user-1', studentName: 'Regular Student', paidDate: '2026-02-01', amount: 350, sessionsTotal: 12, sessionsUsed: 4, expiryDate: '2026-03-01' },
+    { id: 'sub1', planId: 'plan3', studentId: 's1', studentName: 'Andrei Popa', paidDate: '2026-02-01', amount: 250, sessionsTotal: 12, sessionsUsed: 5, expiryDate: '2026-03-01' },
+    { id: 'sub2', planId: 'plan5', studentId: 's2', studentName: 'Elena Dumitru', paidDate: '2026-02-01', amount: 400, sessionsTotal: 16, sessionsUsed: 10, expiryDate: '2026-03-01' },
+    { id: 'sub3', planId: 'plan2', studentId: 's3', studentName: 'Mihai Voicu', paidDate: '2026-01-15', amount: 300, sessionsTotal: 8, sessionsUsed: 8, expiryDate: '2026-02-15' },
+    { id: 'sub4', planId: 'plan3', studentId: 's4', studentName: 'Ioana Stan', paidDate: '2026-02-05', amount: 250, sessionsTotal: 12, sessionsUsed: 3, expiryDate: '2026-03-05' },
+    { id: 'sub5', planId: 'plan5', studentId: 's5', studentName: 'George Enescu', paidDate: '2026-02-10', amount: 400, sessionsTotal: 16, sessionsUsed: 2, expiryDate: '2026-03-10' },
+    { id: 'sub6', planId: 'plan3', studentId: 'user-1', studentName: 'Regular Student', paidDate: '2026-02-01', amount: 350, sessionsTotal: 12, sessionsUsed: 4, expiryDate: '2026-03-01' },
 ];
 
 export const mockCoachSchedule: CoachScheduleSlot[] = [

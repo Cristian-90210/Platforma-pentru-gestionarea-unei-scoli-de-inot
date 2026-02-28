@@ -216,6 +216,15 @@
             "no_messages": "Nu există mesaje.",
             "placeholder": "Scrie un mesaj...",
             "send": "Trimite"
+        },
+        "subscription": {
+            "title": "Abonamentul Meu",
+            "sessions_remaining": "Ședințe rămase",
+            "valid_until": "Valabil până la",
+            "status_active": "ACTIV",
+            "paid_on": "Plătit la",
+            "no_subscription": "Nu ai un abonament activ.",
+            "browse_plans": "Vezi Abonamente"
         }
     },
     "coach_dashboard": {
