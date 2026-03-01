@@ -13,7 +13,7 @@ export const MainLayout: React.FC = () => {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col font-sans transition-colors duration-300">
+        <div className="min-h-screen bg-white dark:bg-gray-900 flex flex-col font-sans transition-colors duration-300">
             <Header
                 onMenuClick={() => setIsMenuOpen(true)}
                 onSearchClick={() => setIsSearchOpen(true)}
@@ -29,13 +29,9 @@ export const MainLayout: React.FC = () => {
                 onClose={() => setIsSearchOpen(false)}
             />
 
-            {/* 
-                If Dashboard, content flows under the absolute header (for hero bg).
-                If other pages, we might want a spacer or a different background.
-            */}
             <main className={clsx(
                 "flex-1 flex flex-col",
-                !isDashboard && "pt-24" // Spacer for non-hero pages
+                !isDashboard && "pt-24"
             )}>
                 <Outlet />
             </main>

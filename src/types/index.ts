@@ -121,6 +121,7 @@ export interface Message {
 
 export interface Subscription {
     id: string;
+    planId: string;
     studentId: string;
     studentName: string;
     paidDate: string;
