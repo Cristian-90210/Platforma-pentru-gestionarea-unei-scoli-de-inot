@@ -216,6 +216,15 @@
             "no_messages": "Нет сообщений.",
             "placeholder": "Напишите сообщение...",
             "send": "Отправить"
+        },
+        "subscription": {
+            "title": "Мой Абонемент",
+            "sessions_remaining": "Оставшиеся сессии",
+            "valid_until": "Действителен до",
+            "status_active": "АКТИВНЫЙ",
+            "paid_on": "Оплачено",
+            "no_subscription": "Нет активного абонемента.",
+            "browse_plans": "Посмотреть абонементы"
         }
     },
     "coach_dashboard": {

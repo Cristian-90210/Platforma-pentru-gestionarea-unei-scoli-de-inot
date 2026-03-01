@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { mockBookings, mockCoaches, mockCourses } from '../data/mockData';
-import { Calendar, Clock, User, ArrowRight, CheckCircle, XCircle, RotateCcw, Trophy, MessageCircle, Send } from 'lucide-react';
+import { mockBookings, mockCoaches, mockCourses, mockSubscriptions, subscriptionPlans } from '../data/mockData';
+import { Calendar, Clock, User, ArrowRight, CheckCircle, XCircle, RotateCcw, Trophy, MessageCircle, Send, CreditCard, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { clsx } from 'clsx';
 import { PageHeader } from '../components/PageHeader';
@@ -38,6 +38,11 @@ export const StudentDashboard: React.FC = () => {
 
     const upcoming = myBookings.filter(b => b.status === 'upcoming');
     const recoverySessions = attendance.filter(a => a.status === 'recovery');
+
+    const mySubscription = mockSubscriptions.find(s => s.studentId === user?.id);
+    const matchedPlan = mySubscription ? subscriptionPlans.find(p => p.id === mySubscription.planId) : null;
+    const sessionsRemaining = mySubscription ? mySubscription.sessionsTotal - mySubscription.sessionsUsed : 0;
+    const sessionProgress = mySubscription ? (mySubscription.sessionsUsed / mySubscription.sessionsTotal) * 100 : 0;
 
     const handleSendMessage = async () => {
         if (!newMessage.trim() || !user) return;
@@ -118,6 +123,108 @@ export const StudentDashboard: React.FC = () => {
                             {t('student_dashboard.stats.book_new')} <ArrowRight size={14} className="ml-1" />
                         </Link>
                     </div>
+                </div>
+
+                {/* My Subscription Section */}
+                <div className="mt-12">
+                    <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
+                        <CreditCard className="mr-3 text-host-cyan" size={24} />
+                        {t('student_dashboard.subscription.title')}
+                    </h2>
+
+                    {mySubscription && matchedPlan ? (
+                        <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 relative overflow-hidden hover:shadow-xl hover:border-host-cyan/50 transition-all duration-300 max-w-2xl">
+                            {/* Active Status Badge */}
+                            <div className="absolute top-4 right-4">
+                                <span className="inline-flex items-center space-x-1.5 bg-emerald-500 text-white text-xs font-extrabold px-4 py-1.5 rounded-full shadow-lg uppercase tracking-widest">
+                                    <Award className="w-3.5 h-3.5" />
+                                    <span>{t('student_dashboard.subscription.status_active')}</span>
+                                </span>
+                            </div>
+
+                            {/* Category badge */}
+                            <div className="mb-4">
+                                {(() => {
+                                    const categoryConfig: Record<string, { label: string; icon: string; color: string }> = {
+                                        standard: { label: t('landing.subscriptions.standard'), icon: '◎', color: 'bg-host-cyan/20 text-host-cyan border-host-cyan/30' },
+                                        pro: { label: t('landing.subscriptions.pro'), icon: '★', color: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30' },
+                                        individual: { label: t('landing.subscriptions.individual'), icon: '✦', color: 'bg-purple-500/20 text-purple-400 border-purple-500/30' },
+                                        transport: { label: t('landing.subscriptions.transport'), icon: '🚐', color: 'bg-green-500/20 text-green-400 border-green-500/30' },
+                                    };
+                                    const cat = categoryConfig[matchedPlan.category] || categoryConfig.standard;
+                                    return (
+                                        <span className={`inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${cat.color}`}>
+                                            <span>{cat.icon}</span>
+                                            <span>{cat.label}</span>
+                                        </span>
+                                    );
+                                })()}
+                            </div>
+
+                            {/* Plan name */}
+                            <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-3 pr-28">
+                                {t(`landing.plans.${matchedPlan.id}.name`)}
+                            </h3>
+
+                            {/* Sessions & Duration row */}
+                            <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400 mb-5">
+                                <span>◷ {matchedPlan.sessions} {t('landing.subscriptions.sessions')}</span>
+                                <span className="text-gray-300 dark:text-gray-600">·</span>
+                                <span>{t(`landing.plans.${matchedPlan.id}.duration`)}</span>
+                            </div>
+
+                            {/* Sessions Progress */}
+                            <div className="mb-5">
+                                <div className="flex justify-between items-center mb-2">
+                                    <span className="text-sm font-bold text-gray-600 dark:text-gray-300">
+                                        {t('student_dashboard.subscription.sessions_remaining')}
+                                    </span>
+                                    <span className="text-sm font-extrabold text-host-cyan">
+                                        {sessionsRemaining} / {mySubscription.sessionsTotal}
+                                    </span>
+                                </div>
+                                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                                    <div
+                                        className="bg-gradient-to-r from-host-blue to-host-cyan h-2.5 rounded-full transition-all duration-500"
+                                        style={{ width: `${100 - sessionProgress}%` }}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Info Grid */}
+                            <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                                <div>
+                                    <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">{t('student_dashboard.subscription.valid_until')}</p>
+                                    <p className="text-sm font-bold text-gray-700 dark:text-gray-200 flex items-center">
+                                        <Calendar size={14} className="mr-1.5 text-host-cyan" />
+                                        {mySubscription.expiryDate}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">{t('student_dashboard.subscription.paid_on')}</p>
+                                    <p className="text-sm font-bold text-gray-700 dark:text-gray-200">
+                                        {mySubscription.paidDate}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Price */}
+                            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                                <div className="flex items-baseline space-x-2">
+                                    <span className="text-2xl font-extrabold text-host-cyan">{mySubscription.amount}</span>
+                                    <span className="text-sm text-gray-500 font-medium">MDL</span>
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-8 text-center max-w-2xl">
+                            <CreditCard className="mx-auto mb-4 text-gray-300 dark:text-gray-600" size={40} />
+                            <p className="text-gray-500 mb-4">{t('student_dashboard.subscription.no_subscription')}</p>
+                            <Link to="/" className="text-host-cyan font-bold hover:underline">
+                                {t('student_dashboard.subscription.browse_plans')}
+                            </Link>
+                        </div>
+                    )}
                 </div>
 
                 {/* Tab Navigation */}
