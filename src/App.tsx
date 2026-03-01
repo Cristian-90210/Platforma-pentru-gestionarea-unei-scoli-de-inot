@@ -20,6 +20,7 @@ import { Reservations } from './pages/admin/Reservations';
 import { Announcements } from './pages/admin/Announcements';
 import { Login } from './pages/Login';
 import { CartPage } from './pages/Cart';
+import { Checkout } from './pages/Checkout';
 import { NotFound } from './pages/NotFound';
 import { Unauthorized } from './pages/Unauthorized';
 import { Forbidden } from './pages/Forbidden';
@@ -92,6 +93,7 @@ function App() {
                   <Route path="courses" element={<Courses />} />
                   <Route path="coaches" element={<Coaches />} />
                   <Route path="cart" element={<CartPage />} />
+                  <Route path="checkout" element={<Checkout />} />
 
                   {/* Admin Only Routes */}
                   <Route path="students" element={

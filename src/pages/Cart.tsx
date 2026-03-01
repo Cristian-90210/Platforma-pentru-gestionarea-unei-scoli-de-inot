@@ -28,6 +28,8 @@ export const CartPage: React.FC = () => {
     const navigate = useNavigate();
 
     return (
+        <div className="min-h-screen bg-gray-50 dark:bg-[#0f1e2d] pt-24 pb-16">
+            <div className="container mx-auto px-4 max-w-4xl">
         <div className="min-h-screen pb-16 pt-8 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #020024 0%, #090979 35%, #00d4ff 100%)' }}>
             {/* Soft radial glow at the top for depth */}
             <div
@@ -206,6 +208,9 @@ export const CartPage: React.FC = () => {
                                     </div>
                                 </div>
 
+                                <button
+                                    onClick={() => navigate('/checkout')}
+                                    className="w-full py-3.5 bg-gradient-to-r from-[#00c6ff] to-[#0072ff] text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-cyan-500/30 transition-all duration-300 hover:scale-[1.01] active:scale-[0.99]">
                                 <button className="w-full py-3.5 bg-host-cyan text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-cyan-500/30 transition-all duration-300 hover:scale-[1.01] active:scale-[0.99]">
                                     <CreditCard size={18} />
                                     Finalizează Comanda
