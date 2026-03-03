@@ -194,7 +194,18 @@
             "absent": "Absent",
             "recovery": "Recovery",
             "no_records": "No attendance records found.",
-            "booking": "Booking"
+            "booking": "Booking",
+            "self_only": "You can only mark your own attendance directly from the calendar.",
+            "calendar_date": "Calendar date",
+            "select_status": "Choose status",
+            "confirm_choice": "I accept that this is my choice (present/absent).",
+            "accept": "Accept",
+            "training_day": "training",
+            "saving": "Saving...",
+            "saved_success": "Attendance saved successfully.",
+            "already_marked": "You already marked attendance for this date.",
+            "select_status_error": "Choose Present or Absent first.",
+            "accept_error": "Tick Accept to confirm your choice."
         },
         "results": {
             "title": "My Results",

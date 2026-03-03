@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { mockBookings, mockCoaches, mockCourses, mockSubscriptions, subscriptionPlans } from '../data/mockData';
-import { Calendar, Clock, User, ArrowRight, CheckCircle, XCircle, RotateCcw, Trophy, MessageCircle, Send, CreditCard, Award } from 'lucide-react';
+import { Calendar, Clock, User, ArrowRight, CheckCircle, XCircle, RotateCcw, Trophy, MessageCircle, Send, CreditCard, Award, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { clsx } from 'clsx';
 import { PageHeader } from '../components/PageHeader';
@@ -11,7 +11,7 @@ import { attendanceService, resultsService, messageService } from '../services/a
 
 export const StudentDashboard: React.FC = () => {
     const { user } = useAuth();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const [attendance, setAttendance] = useState<AttendanceRecord[]>([]);
     const [results, setResults] = useState<SwimmingResult[]>([]);
@@ -19,6 +19,13 @@ export const StudentDashboard: React.FC = () => {
     const [newMessage, setNewMessage] = useState('');
     const [selectedReceiver, setSelectedReceiver] = useState('c1');
     const [activeTab, setActiveTab] = useState<'bookings' | 'attendance' | 'results' | 'recovery' | 'messages'>('bookings');
+    const [attendanceMonth, setAttendanceMonth] = useState(() => {
+        const now = new Date();
+        return new Date(now.getFullYear(), now.getMonth(), 1);
+    });
+    const [attendanceMonthInitialized, setAttendanceMonthInitialized] = useState(false);
+    const [savingAttendanceDate, setSavingAttendanceDate] = useState<string | null>(null);
+    const [attendanceFeedback, setAttendanceFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
     useEffect(() => {
         if (user) {
@@ -69,6 +76,79 @@ export const StudentDashboard: React.FC = () => {
         });
         setAttendance(prev => [...prev, record]);
     };
+
+    const handleMarkMyAttendanceForDate = async (date: string, bookingId: string, status: 'present' | 'absent') => {
+        if (!user) return;
+
+        setSavingAttendanceDate(date);
+        const record = await attendanceService.mark({
+            bookingId,
+            studentId: user.id,
+            date,
+            status,
+            markedBy: user.id,
+        });
+
+        setAttendance(prev => {
+            const withoutSameDate = prev.filter(a => a.date !== date);
+            return [record, ...withoutSameDate];
+        });
+        setSavingAttendanceDate(null);
+        setAttendanceFeedback({ type: 'success', message: t('student_dashboard.attendance.saved_success') });
+    };
+
+    const locale = i18n.language === 'ro' ? 'ro-RO' : i18n.language === 'ru' ? 'ru-RU' : 'en-US';
+
+    const trainingBookings = useMemo(() => {
+        return myBookings.filter(b => b.status !== 'cancelled');
+    }, [myBookings]);
+
+    const trainingsByDate = useMemo(() => {
+        const grouped = new Map<string, typeof trainingBookings>();
+        trainingBookings.forEach(booking => {
+            const existing = grouped.get(booking.date) ?? [];
+            grouped.set(booking.date, [...existing, booking]);
+        });
+        return grouped;
+    }, [trainingBookings]);
+
+    const attendanceByDate = useMemo(() => {
+        const grouped = new Map<string, AttendanceRecord>();
+        attendance.forEach(record => {
+            grouped.set(record.date, record);
+        });
+        return grouped;
+    }, [attendance]);
+
+    const weekdays = useMemo(() => {
+        const monday = new Date(2026, 0, 5);
+        return Array.from({ length: 7 }, (_, i) =>
+            new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + i).toLocaleDateString(locale, { weekday: 'short' })
+        );
+    }, [locale]);
+
+    const daysInCalendarMonth = useMemo(() => {
+        const year = attendanceMonth.getFullYear();
+        const month = attendanceMonth.getMonth();
+        return new Date(year, month + 1, 0).getDate();
+    }, [attendanceMonth]);
+
+    const firstDayOffset = useMemo(() => {
+        const firstDay = new Date(attendanceMonth.getFullYear(), attendanceMonth.getMonth(), 1).getDay();
+        return firstDay === 0 ? 6 : firstDay - 1;
+    }, [attendanceMonth]);
+
+    const monthLabel = attendanceMonth.toLocaleDateString(locale, { month: 'long', year: 'numeric' });
+
+    useEffect(() => {
+        if (attendanceMonthInitialized || trainingBookings.length === 0) return;
+        const sorted = [...trainingBookings].sort((a, b) => a.date.localeCompare(b.date));
+        const firstTrainingDate = sorted[0]?.date;
+        if (!firstTrainingDate) return;
+        const [year, month] = firstTrainingDate.split('-').map(Number);
+        setAttendanceMonth(new Date(year, month - 1, 1));
+        setAttendanceMonthInitialized(true);
+    }, [attendanceMonthInitialized, trainingBookings]);
 
     const tabs = [
         { key: 'bookings' as const, label: t('student_dashboard.tabs.bookings') },
@@ -328,6 +408,141 @@ export const StudentDashboard: React.FC = () => {
                         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden">
                             <div className="p-6 border-b border-gray-100 dark:border-gray-700">
                                 <h2 className="text-xl font-bold text-gray-800 dark:text-white">{t('student_dashboard.attendance.title')}</h2>
+                            </div>
+                            <div className="p-6 border-b border-gray-100 dark:border-gray-700 space-y-4">
+                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                    {t('student_dashboard.attendance.self_only')}
+                                </p>
+                                <div className="rounded-2xl border border-gray-200 dark:border-gray-700 p-4 md:p-6">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <button
+                                            type="button"
+                                            onClick={() => setAttendanceMonth(new Date(attendanceMonth.getFullYear(), attendanceMonth.getMonth() - 1, 1))}
+                                            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300"
+                                        >
+                                            <ChevronLeft size={18} />
+                                        </button>
+                                        <h3 className="text-lg font-bold text-gray-800 dark:text-white capitalize">{monthLabel}</h3>
+                                        <button
+                                            type="button"
+                                            onClick={() => setAttendanceMonth(new Date(attendanceMonth.getFullYear(), attendanceMonth.getMonth() + 1, 1))}
+                                            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300"
+                                        >
+                                            <ChevronRight size={18} />
+                                        </button>
+                                    </div>
+
+                                    <div className="grid grid-cols-7 gap-2 mb-2">
+                                        {weekdays.map(day => (
+                                            <div key={day} className="text-center text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 py-2">
+                                                {day}
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className="grid grid-cols-7 gap-2">
+                                        {Array.from({ length: firstDayOffset }).map((_, index) => (
+                                            <div key={`empty-${index}`} className="min-h-28 md:min-h-32 rounded-lg bg-gray-50/60 dark:bg-gray-900/40" />
+                                        ))}
+
+                                        {Array.from({ length: daysInCalendarMonth }, (_, index) => {
+                                            const day = index + 1;
+                                            const isoDate = `${attendanceMonth.getFullYear()}-${String(attendanceMonth.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                                            const bookings = trainingsByDate.get(isoDate) ?? [];
+                                            const existingAttendance = attendanceByDate.get(isoDate);
+                                            const hasTraining = bookings.length > 0;
+                                            const isSaving = savingAttendanceDate === isoDate;
+
+                                            return (
+                                                <div
+                                                    key={isoDate}
+                                                    className={clsx(
+                                                        "min-h-28 md:min-h-32 rounded-lg border p-2 flex flex-col gap-2",
+                                                        hasTraining
+                                                            ? "border-host-cyan/40 bg-cyan-50/60 dark:bg-cyan-900/10"
+                                                            : "border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800"
+                                                    )}
+                                                >
+                                                    <div className="flex items-center justify-between">
+                                                        <span className="text-sm font-bold text-gray-800 dark:text-white">{day}</span>
+                                                        {hasTraining && (
+                                                            <span className="text-[10px] font-bold uppercase tracking-wider text-host-cyan">
+                                                                {t('student_dashboard.attendance.training_day')}
+                                                            </span>
+                                                        )}
+                                                    </div>
+
+                                                    {hasTraining && (
+                                                        <div className="text-[11px] text-gray-600 dark:text-gray-300 leading-tight space-y-1">
+                                                            {bookings.map(booking => (
+                                                                <div key={booking.id} className="font-medium">{booking.time}</div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+
+                                                    {hasTraining && existingAttendance && (
+                                                        <span className={clsx(
+                                                            "inline-flex items-center justify-center px-2 py-1 rounded text-[11px] font-bold uppercase",
+                                                            existingAttendance.status === 'present' ? "bg-green-100 text-green-700" :
+                                                                existingAttendance.status === 'absent' ? "bg-red-100 text-red-700" :
+                                                                    "bg-yellow-100 text-yellow-700"
+                                                        )}>
+                                                            {existingAttendance.status === 'present' ? t('student_dashboard.attendance.present') :
+                                                                existingAttendance.status === 'absent' ? t('student_dashboard.attendance.absent') :
+                                                                    t('student_dashboard.attendance.recovery')}
+                                                        </span>
+                                                    )}
+
+                                                    {hasTraining && (
+                                                        <div className="mt-auto space-y-2">
+                                                            <div className="flex gap-1">
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => handleMarkMyAttendanceForDate(isoDate, bookings[0].id, 'present')}
+                                                                    disabled={isSaving}
+                                                                    className={clsx(
+                                                                        "flex-1 text-[11px] py-1 font-bold border disabled:opacity-60",
+                                                                        existingAttendance?.status === 'present'
+                                                                            ? "bg-green-600 border-green-600 text-white"
+                                                                            : "bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200"
+                                                                    )}
+                                                                >
+                                                                    {t('student_dashboard.attendance.present')}
+                                                                </button>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => handleMarkMyAttendanceForDate(isoDate, bookings[0].id, 'absent')}
+                                                                    disabled={isSaving}
+                                                                    className={clsx(
+                                                                        "flex-1 text-[11px] py-1 font-bold border disabled:opacity-60",
+                                                                        existingAttendance?.status === 'absent'
+                                                                            ? "bg-red-600 border-red-600 text-white"
+                                                                            : "bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200"
+                                                                    )}
+                                                                >
+                                                                    {t('student_dashboard.attendance.absent')}
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+
+                                {attendanceFeedback && (
+                                    <div
+                                        className={clsx(
+                                            "text-sm font-medium",
+                                            attendanceFeedback.type === 'success'
+                                                ? "text-green-600 dark:text-green-400"
+                                                : "text-red-600 dark:text-red-400"
+                                        )}
+                                    >
+                                        {attendanceFeedback.message}
+                                    </div>
+                                )}
                             </div>
                             {attendance.length > 0 ? (
                                 <div className="divide-y divide-gray-100 dark:divide-gray-700">

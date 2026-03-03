@@ -194,7 +194,18 @@
             "absent": "Absent",
             "recovery": "Recuperare",
             "no_records": "Nu există înregistrări de prezență.",
-            "booking": "Programare"
+            "booking": "Programare",
+            "self_only": "Poți marca doar prezența ta, direct din calendar.",
+            "calendar_date": "Data din calendar",
+            "select_status": "Alege statusul",
+            "confirm_choice": "Accept că aceasta este alegerea mea (prezent/absent).",
+            "accept": "Accept",
+            "training_day": "antrenament",
+            "saving": "Se salvează...",
+            "saved_success": "Prezența a fost salvată cu succes.",
+            "already_marked": "Pentru această dată ai deja o prezență salvată.",
+            "select_status_error": "Alege mai întâi Prezent sau Absent.",
+            "accept_error": "Bifează mai întâi Accept pentru confirmare."
         },
         "results": {
             "title": "Rezultatele Mele",
