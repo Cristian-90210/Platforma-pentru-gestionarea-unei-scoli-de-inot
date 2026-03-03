@@ -24,6 +24,7 @@ export const StudentDashboard: React.FC = () => {
         return new Date(now.getFullYear(), now.getMonth(), 1);
     });
     const [attendanceMonthInitialized, setAttendanceMonthInitialized] = useState(false);
+    const [pendingAttendanceChoiceByDate, setPendingAttendanceChoiceByDate] = useState<Record<string, 'present' | 'absent'>>({});
     const [savingAttendanceDate, setSavingAttendanceDate] = useState<string | null>(null);
     const [attendanceFeedback, setAttendanceFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
@@ -73,8 +74,13 @@ export const StudentDashboard: React.FC = () => {
             date,
             status: 'absent',
             markedBy: user.id,
+            confirmed: false,
+            submittedByStudent: true,
         });
-        setAttendance(prev => [...prev, record]);
+        setAttendance(prev => {
+            const withoutSameDate = prev.filter(a => a.date !== date);
+            return [record, ...withoutSameDate];
+        });
     };
 
     const handleMarkMyAttendanceForDate = async (date: string, bookingId: string, status: 'present' | 'absent') => {
@@ -87,17 +93,40 @@ export const StudentDashboard: React.FC = () => {
             date,
             status,
             markedBy: user.id,
+            confirmed: false,
+            submittedByStudent: true,
         });
 
         setAttendance(prev => {
             const withoutSameDate = prev.filter(a => a.date !== date);
             return [record, ...withoutSameDate];
         });
+        setPendingAttendanceChoiceByDate(prev => {
+            const updated = { ...prev };
+            delete updated[date];
+            return updated;
+        });
         setSavingAttendanceDate(null);
         setAttendanceFeedback({ type: 'success', message: t('student_dashboard.attendance.saved_success') });
     };
 
     const locale = i18n.language === 'ro' ? 'ro-RO' : i18n.language === 'ru' ? 'ru-RU' : 'en-US';
+
+    const getAttendanceStatusClass = (status: AttendanceRecord['status']) => {
+        if (status === 'present') return 'bg-green-100 text-green-700';
+        if (status === 'absent') return 'bg-red-100 text-red-700';
+        if (status === 'absent_medical') return 'bg-orange-100 text-orange-700';
+        if (status === 'late') return 'bg-blue-100 text-blue-700';
+        return 'bg-yellow-100 text-yellow-700';
+    };
+
+    const getAttendanceStatusLabel = (status: AttendanceRecord['status']) => {
+        if (status === 'present') return t('student_dashboard.attendance.present');
+        if (status === 'absent') return t('student_dashboard.attendance.absent');
+        if (status === 'absent_medical') return t('student_dashboard.attendance.absent_medical');
+        if (status === 'late') return t('student_dashboard.attendance.late');
+        return t('student_dashboard.attendance.recovery');
+    };
 
     const trainingBookings = useMemo(() => {
         return myBookings.filter(b => b.status !== 'cancelled');
@@ -452,6 +481,7 @@ export const StudentDashboard: React.FC = () => {
                                             const existingAttendance = attendanceByDate.get(isoDate);
                                             const hasTraining = bookings.length > 0;
                                             const isSaving = savingAttendanceDate === isoDate;
+                                            const selectedStatus = pendingAttendanceChoiceByDate[isoDate];
 
                                             return (
                                                 <div
@@ -483,13 +513,21 @@ export const StudentDashboard: React.FC = () => {
                                                     {hasTraining && existingAttendance && (
                                                         <span className={clsx(
                                                             "inline-flex items-center justify-center px-2 py-1 rounded text-[11px] font-bold uppercase",
-                                                            existingAttendance.status === 'present' ? "bg-green-100 text-green-700" :
-                                                                existingAttendance.status === 'absent' ? "bg-red-100 text-red-700" :
-                                                                    "bg-yellow-100 text-yellow-700"
+                                                            getAttendanceStatusClass(existingAttendance.status)
                                                         )}>
-                                                            {existingAttendance.status === 'present' ? t('student_dashboard.attendance.present') :
-                                                                existingAttendance.status === 'absent' ? t('student_dashboard.attendance.absent') :
-                                                                    t('student_dashboard.attendance.recovery')}
+                                                            {getAttendanceStatusLabel(existingAttendance.status)}
+                                                        </span>
+                                                    )}
+                                                    {hasTraining && existingAttendance && (
+                                                        <span className={clsx(
+                                                            "inline-flex items-center justify-center px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wide",
+                                                            existingAttendance.confirmed === false
+                                                                ? "bg-amber-100 text-amber-700"
+                                                                : "bg-emerald-100 text-emerald-700"
+                                                        )}>
+                                                            {existingAttendance.confirmed === false
+                                                                ? t('student_dashboard.attendance.pending_teacher_confirmation')
+                                                                : t('student_dashboard.attendance.confirmed_by_teacher')}
                                                         </span>
                                                     )}
 
@@ -498,11 +536,14 @@ export const StudentDashboard: React.FC = () => {
                                                             <div className="flex gap-1">
                                                                 <button
                                                                     type="button"
-                                                                    onClick={() => handleMarkMyAttendanceForDate(isoDate, bookings[0].id, 'present')}
-                                                                    disabled={isSaving}
+                                                                    onClick={() => {
+                                                                        setPendingAttendanceChoiceByDate(prev => ({ ...prev, [isoDate]: 'present' }));
+                                                                        setAttendanceFeedback(null);
+                                                                    }}
+                                                                    disabled={isSaving || existingAttendance?.confirmed === true}
                                                                     className={clsx(
                                                                         "flex-1 text-[11px] py-1 font-bold border disabled:opacity-60",
-                                                                        existingAttendance?.status === 'present'
+                                                                        (selectedStatus ?? existingAttendance?.status) === 'present'
                                                                             ? "bg-green-600 border-green-600 text-white"
                                                                             : "bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200"
                                                                     )}
@@ -511,11 +552,14 @@ export const StudentDashboard: React.FC = () => {
                                                                 </button>
                                                                 <button
                                                                     type="button"
-                                                                    onClick={() => handleMarkMyAttendanceForDate(isoDate, bookings[0].id, 'absent')}
-                                                                    disabled={isSaving}
+                                                                    onClick={() => {
+                                                                        setPendingAttendanceChoiceByDate(prev => ({ ...prev, [isoDate]: 'absent' }));
+                                                                        setAttendanceFeedback(null);
+                                                                    }}
+                                                                    disabled={isSaving || existingAttendance?.confirmed === true}
                                                                     className={clsx(
                                                                         "flex-1 text-[11px] py-1 font-bold border disabled:opacity-60",
-                                                                        existingAttendance?.status === 'absent'
+                                                                        (selectedStatus ?? existingAttendance?.status) === 'absent'
                                                                             ? "bg-red-600 border-red-600 text-white"
                                                                             : "bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200"
                                                                     )}
@@ -523,6 +567,21 @@ export const StudentDashboard: React.FC = () => {
                                                                     {t('student_dashboard.attendance.absent')}
                                                                 </button>
                                                             </div>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    const choice = pendingAttendanceChoiceByDate[isoDate];
+                                                                    if (!choice) {
+                                                                        setAttendanceFeedback({ type: 'error', message: t('student_dashboard.attendance.select_status_error') });
+                                                                        return;
+                                                                    }
+                                                                    handleMarkMyAttendanceForDate(isoDate, bookings[0].id, choice);
+                                                                }}
+                                                                disabled={isSaving || existingAttendance?.confirmed === true}
+                                                                className="w-full text-[11px] py-1.5 font-bold bg-host-cyan text-white hover:bg-host-blue transition-colors disabled:opacity-60"
+                                                            >
+                                                                {isSaving ? t('student_dashboard.attendance.saving') : t('student_dashboard.attendance.accept')}
+                                                            </button>
                                                         </div>
                                                     )}
                                                 </div>
@@ -549,15 +608,18 @@ export const StudentDashboard: React.FC = () => {
                                     {attendance.map(a => (
                                         <div key={a.id} className="p-6 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                                             <div className="flex items-center space-x-4">
-                                                <div className={clsx(
+                                            <div className={clsx(
                                                     "p-2 rounded-full",
                                                     a.status === 'present' ? "bg-green-100 text-green-600" :
                                                         a.status === 'absent' ? "bg-red-100 text-red-600" :
-                                                            "bg-yellow-100 text-yellow-600"
+                                                            a.status === 'absent_medical' ? "bg-orange-100 text-orange-600" :
+                                                                a.status === 'late' ? "bg-blue-100 text-blue-600" :
+                                                                    "bg-yellow-100 text-yellow-600"
                                                 )}>
                                                     {a.status === 'present' ? <CheckCircle size={20} /> :
-                                                        a.status === 'absent' ? <XCircle size={20} /> :
-                                                            <RotateCcw size={20} />}
+                                                        a.status === 'absent' || a.status === 'absent_medical' ? <XCircle size={20} /> :
+                                                            a.status === 'late' ? <Clock size={20} /> :
+                                                                <RotateCcw size={20} />}
                                                 </div>
                                                 <div>
                                                     <div className="font-bold text-gray-800 dark:text-gray-200">{a.date}</div>
@@ -566,12 +628,17 @@ export const StudentDashboard: React.FC = () => {
                                             </div>
                                             <span className={clsx(
                                                 "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide",
-                                                a.status === 'present' ? "bg-green-100 text-green-700" :
-                                                    a.status === 'absent' ? "bg-red-100 text-red-700" :
-                                                        "bg-yellow-100 text-yellow-700"
+                                                getAttendanceStatusClass(a.status)
                                             )}>
-                                                {a.status === 'present' ? t('student_dashboard.attendance.present') :
-                                                    a.status === 'absent' ? t('student_dashboard.attendance.absent') : t('student_dashboard.attendance.recovery')}
+                                                {getAttendanceStatusLabel(a.status)}
+                                            </span>
+                                            <span className={clsx(
+                                                "ml-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide",
+                                                a.confirmed === false ? "bg-amber-100 text-amber-700" : "bg-emerald-100 text-emerald-700"
+                                            )}>
+                                                {a.confirmed === false
+                                                    ? t('student_dashboard.attendance.pending_teacher_confirmation')
+                                                    : t('student_dashboard.attendance.confirmed_by_teacher')}
                                             </span>
                                         </div>
                                     ))}

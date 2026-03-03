@@ -192,6 +192,8 @@
             "title": "История Посещений",
             "present": "Присутствовал",
             "absent": "Отсутствовал",
+            "absent_medical": "Отсутствовал (мед.)",
+            "late": "Опоздал",
             "recovery": "Восстановление",
             "no_records": "Нет записей о посещаемости.",
             "booking": "Бронирование",
@@ -205,7 +207,9 @@
             "saved_success": "Посещаемость успешно сохранена.",
             "already_marked": "Для этой даты посещаемость уже отмечена.",
             "select_status_error": "Сначала выберите Присутствовал или Отсутствовал.",
-            "accept_error": "Поставьте галочку Принять для подтверждения."
+            "accept_error": "Поставьте галочку Принять для подтверждения.",
+            "pending_teacher_confirmation": "Ожидает тренера",
+            "confirmed_by_teacher": "Подтверждено тренером"
         },
         "results": {
             "title": "Мои Результаты",
@@ -258,13 +262,38 @@
         },
         "attendance": {
             "title": "Отметить посещаемость",
+            "mode_group": "Группа",
+            "mode_individual": "Индивидуально",
             "present": "Присутствовал",
             "absent": "Отсутствовал",
+            "absent_medical": "Отсутствовал (мед.)",
+            "late": "Опоздал",
             "recovery": "Отработка",
+            "health_alert": "Мед. предупреждение",
+            "health_alert_banner": "Внимание: {{count}} активных мед. предупреждений в выбранном слоте.",
+            "progress": "Прогресс",
+            "recovery_credits": "Отработки: {{count}}",
+            "pending_confirmations": "Ожидают подтверждения (от студентов)",
+            "no_pending_confirmations": "Нет ожидающих подтверждений.",
+            "no_group_sessions": "Нет групповых занятий для отметки посещаемости.",
+            "no_individual_sessions": "Нет индивидуальных занятий для отметки посещаемости.",
+            "nothing_to_confirm": "Нет студентов для подтверждения в выбранном слоте.",
+            "confirmation_success": "Подтверждение выполнено тренером: {{count}} ученик(ов) в {{hour}}.",
+            "mark_all_present_success": "Отмечено как присутствующие: {{count}} ученик(ов).",
+            "session_confirmed_by_coach": "Занятие подтверждено тренером: {{count}} ученик(ов) в {{hour}}.",
+            "confirm_hour": "Час подтверждения",
+            "awaiting_coach_confirmation": "Ожидает подтверждения",
+            "confirmed": "Подтверждено",
+            "confirmed_by_you": "Подтверждено вами",
             "action": {
                 "mark_present": "Присутствовал",
                 "mark_absent": "Отсутствовал",
-                "mark_recovery": "Восстановление"
+                "mark_absent_medical": "Мед. отсутствие",
+                "mark_late": "Опоздал",
+                "mark_recovery": "Восстановление",
+                "confirm_final": "Подтвердить",
+                "confirm_all_for_hour": "Подтвердить всех в {{hour}}",
+                "mark_all_present": "Все присутствуют"
             }
         },
         "results": {

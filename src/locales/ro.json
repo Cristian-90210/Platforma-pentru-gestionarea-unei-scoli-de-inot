@@ -192,6 +192,8 @@
             "title": "Istoric Prezență",
             "present": "Prezent",
             "absent": "Absent",
+            "absent_medical": "Absent medical",
+            "late": "Întârziat",
             "recovery": "Recuperare",
             "no_records": "Nu există înregistrări de prezență.",
             "booking": "Programare",
@@ -205,7 +207,9 @@
             "saved_success": "Prezența a fost salvată cu succes.",
             "already_marked": "Pentru această dată ai deja o prezență salvată.",
             "select_status_error": "Alege mai întâi Prezent sau Absent.",
-            "accept_error": "Bifează mai întâi Accept pentru confirmare."
+            "accept_error": "Bifează mai întâi Accept pentru confirmare.",
+            "pending_teacher_confirmation": "În așteptarea profesorului",
+            "confirmed_by_teacher": "Confirmat de profesor"
         },
         "results": {
             "title": "Rezultatele Mele",
@@ -258,13 +262,38 @@
         },
         "attendance": {
             "title": "Marchează Prezența",
+            "mode_group": "Grup",
+            "mode_individual": "Individual",
             "present": "Prezent",
             "absent": "Absent",
+            "absent_medical": "Absent medical",
+            "late": "Întârziat",
             "recovery": "Recuperare",
+            "health_alert": "Alertă medicală",
+            "health_alert_banner": "Atenție: {{count}} alerte medicale active în slotul selectat.",
+            "progress": "Progres",
+            "recovery_credits": "Recuperări: {{count}}",
+            "pending_confirmations": "Confirmări în așteptare (de la elevi)",
+            "no_pending_confirmations": "Nu există confirmări în așteptare.",
+            "no_group_sessions": "Nu există sesiuni de grup pentru marcarea prezenței.",
+            "no_individual_sessions": "Nu există sesiuni individuale pentru marcarea prezenței.",
+            "nothing_to_confirm": "Nu există elevi de confirmat pentru slotul selectat.",
+            "confirmation_success": "Confirmare efectuată de profesor: {{count}} elev(i) la ora {{hour}}.",
+            "mark_all_present_success": "Au fost marcați prezent {{count}} elevi.",
+            "session_confirmed_by_coach": "Sesiune confirmată de profesor: {{count}} elevi la ora {{hour}}.",
+            "confirm_hour": "Ora pentru confirmare",
+            "awaiting_coach_confirmation": "În așteptare",
+            "confirmed": "Confirmat",
+            "confirmed_by_you": "Confirmat de dvs",
             "action": {
                 "mark_present": "Prezent",
                 "mark_absent": "Absent",
-                "mark_recovery": "Recuperare"
+                "mark_absent_medical": "Absent medical",
+                "mark_late": "Întârziat",
+                "mark_recovery": "Recuperare",
+                "confirm_final": "Confirmă Final",
+                "confirm_all_for_hour": "Confirmă toți la {{hour}}",
+                "mark_all_present": "Toți prezenți"
             }
         },
         "results": {

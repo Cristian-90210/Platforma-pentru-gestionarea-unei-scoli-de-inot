@@ -192,6 +192,8 @@
             "title": "Attendance History",
             "present": "Present",
             "absent": "Absent",
+            "absent_medical": "Medical Absent",
+            "late": "Late",
             "recovery": "Recovery",
             "no_records": "No attendance records found.",
             "booking": "Booking",
@@ -205,7 +207,9 @@
             "saved_success": "Attendance saved successfully.",
             "already_marked": "You already marked attendance for this date.",
             "select_status_error": "Choose Present or Absent first.",
-            "accept_error": "Tick Accept to confirm your choice."
+            "accept_error": "Tick Accept to confirm your choice.",
+            "pending_teacher_confirmation": "Waiting for coach",
+            "confirmed_by_teacher": "Confirmed by coach"
         },
         "results": {
             "title": "My Results",
@@ -258,13 +262,38 @@
         },
         "attendance": {
             "title": "Mark Attendance",
+            "mode_group": "Group",
+            "mode_individual": "Individual",
             "present": "Present",
             "absent": "Absent",
+            "absent_medical": "Medical Absent",
+            "late": "Late",
             "recovery": "Recovery",
+            "health_alert": "Medical Alert",
+            "health_alert_banner": "Warning: {{count}} active medical alerts in selected slot.",
+            "progress": "Progress",
+            "recovery_credits": "Make-ups: {{count}}",
+            "pending_confirmations": "Pending confirmations (from students)",
+            "no_pending_confirmations": "No pending confirmations.",
+            "no_group_sessions": "No group sessions available for attendance marking.",
+            "no_individual_sessions": "No individual sessions available for attendance marking.",
+            "nothing_to_confirm": "There are no students to confirm for the selected slot.",
+            "confirmation_success": "Confirmation completed by coach: {{count}} student(s) at {{hour}}.",
+            "mark_all_present_success": "Marked {{count}} student(s) as present.",
+            "session_confirmed_by_coach": "Session confirmed by coach: {{count}} student(s) at {{hour}}.",
+            "confirm_hour": "Hour to confirm",
+            "awaiting_coach_confirmation": "Awaiting confirmation",
+            "confirmed": "Confirmed",
+            "confirmed_by_you": "Confirmed by you",
             "action": {
                 "mark_present": "Present",
                 "mark_absent": "Absent",
-                "mark_recovery": "Recovery"
+                "mark_absent_medical": "Medical Absent",
+                "mark_late": "Late",
+                "mark_recovery": "Recovery",
+                "confirm_final": "Final Confirm",
+                "confirm_all_for_hour": "Confirm all at {{hour}}",
+                "mark_all_present": "All Present"
             }
         },
         "results": {
