@@ -1,10 +1,11 @@
-import type { Student, Course, Coach, AnyUser, Announcement, SwimmingResult, AttendanceRecord, Message, Subscription, CoachScheduleSlot, SpecialOffer, StudentNote, RecoveryCredit, StudentHealthFlag, ProgressSnapshot } from '../types';
+import type { Student, Course, Coach, AnyUser, Announcement, SwimmingResult, AttendanceRecord, Message, Subscription, CoachScheduleSlot, SpecialOffer, StudentNote, RecoveryCredit, StudentHealthFlag, ProgressSnapshot, RecoveryRequest } from '../types';
 import { mockStudents, mockCourses, mockCoaches, mockAdmins, mockAnnouncements, mockBookings, mockSwimmingResults, mockAttendance, mockMessages, mockSubscriptions, mockCoachSchedule, mockSpecialOffers, mockStudentNotes, mockRecoveryCredits, mockStudentHealthFlags, mockProgressSnapshots } from '../data/mockData';
 
 // Simulate async API delay
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 const ATTENDANCE_STORAGE_KEY = 'attendance_store_v2';
 const RECOVERY_STORAGE_KEY = 'recovery_store_v1';
+const RECOVERY_REQUEST_STORAGE_KEY = 'recovery_request_store_v1';
 
 const loadFromStorage = <T>(key: string, fallback: T): T => {
     if (typeof window === 'undefined') return fallback;
@@ -28,6 +29,7 @@ const saveToStorage = <T>(key: string, value: T): void => {
 
 const attendanceStore: AttendanceRecord[] = loadFromStorage(ATTENDANCE_STORAGE_KEY, [...mockAttendance]);
 const recoveryStore: RecoveryCredit[] = loadFromStorage(RECOVERY_STORAGE_KEY, [...mockRecoveryCredits]);
+const recoveryRequestStore: RecoveryRequest[] = loadFromStorage(RECOVERY_REQUEST_STORAGE_KEY, []);
 
 export const studentService = {
     getAll: async (): Promise<Student[]> => {
@@ -205,6 +207,49 @@ export const recoveryService = {
         saveToStorage(RECOVERY_STORAGE_KEY, recoveryStore);
         return updated;
     }
+};
+
+export const recoveryRequestService = {
+    getAll: async (): Promise<RecoveryRequest[]> => {
+        await delay(200);
+        return [...recoveryRequestStore];
+    },
+    getByStudent: async (studentId: string): Promise<RecoveryRequest[]> => {
+        await delay(200);
+        return recoveryRequestStore.filter(r => r.studentId === studentId);
+    },
+    create: async (request: Omit<RecoveryRequest, 'id' | 'requestedAt' | 'status'>): Promise<RecoveryRequest> => {
+        await delay(250);
+        const existing = recoveryRequestStore.find(
+            r => r.studentId === request.studentId && r.date === request.date && (r.status === 'pending' || r.status === 'confirmed')
+        );
+        if (existing) return existing;
+
+        const created: RecoveryRequest = {
+            id: 'rr' + Math.random().toString(36).substr(2, 6),
+            studentId: request.studentId,
+            date: request.date,
+            status: 'pending',
+            requestedAt: new Date().toISOString(),
+        };
+        recoveryRequestStore.push(created);
+        saveToStorage(RECOVERY_REQUEST_STORAGE_KEY, recoveryRequestStore);
+        return created;
+    },
+    confirm: async (requestId: string, coachId: string): Promise<RecoveryRequest> => {
+        await delay(250);
+        const index = recoveryRequestStore.findIndex(r => r.id === requestId);
+        if (index < 0) throw new Error('Recovery request not found');
+        const updated: RecoveryRequest = {
+            ...recoveryRequestStore[index],
+            status: 'confirmed',
+            confirmedBy: coachId,
+            confirmedAt: new Date().toISOString(),
+        };
+        recoveryRequestStore[index] = updated;
+        saveToStorage(RECOVERY_REQUEST_STORAGE_KEY, recoveryRequestStore);
+        return updated;
+    },
 };
 
 export const healthService = {

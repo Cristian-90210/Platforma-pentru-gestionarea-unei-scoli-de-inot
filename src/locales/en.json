@@ -224,7 +224,25 @@
         "recovery": {
             "title": "Recovery Sessions",
             "session": "Recovery session",
-            "no_sessions": "No recovery sessions scheduled."
+            "no_sessions": "No recovery sessions scheduled.",
+            "active_credits": "Available credits",
+            "pending_requests": "Pending requests",
+            "confirmed_requests": "Confirmed requests",
+            "instructions": "Pick an available day in the calendar and send a recovery request. The coach will confirm it afterwards.",
+            "available": "available",
+            "selected_date": "Selected date: {{date}}",
+            "no_date_selected": "No date selected yet.",
+            "send_request": "Send recovery request",
+            "sending": "Sending...",
+            "request_sent": "Recovery request sent and waiting for confirmation.",
+            "select_date_error": "Select an available date.",
+            "date_not_available": "Selected date is not available for recovery.",
+            "requests_title": "Recovery requests",
+            "request_made": "Requested on",
+            "no_requests": "You don't have recovery requests yet.",
+            "status_pending": "pending",
+            "status_confirmed": "confirmed",
+            "status_rejected": "rejected"
         },
         "messages": {
             "title": "Messages",
@@ -307,7 +325,13 @@
         },
         "recovery": {
             "title": "Students for Recovery",
-            "no_students": "No students for recovery."
+            "no_students": "No students for recovery.",
+            "pending_requests": "Pending recovery requests",
+            "no_pending_requests": "No new recovery requests.",
+            "confirm_request": "Confirm recovery",
+            "request_confirmed": "Recovery confirmed for {{date}} and added to calendar.",
+            "request_confirm_error": "Could not confirm recovery request.",
+            "in_calendar": "In calendar"
         },
         "individual": {
             "title": "Individual Sessions",

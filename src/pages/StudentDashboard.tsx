@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 import { clsx } from 'clsx';
 import { PageHeader } from '../components/PageHeader';
 import { useTranslation } from 'react-i18next';
-import type { AttendanceRecord, SwimmingResult, Message } from '../types';
-import { attendanceService, resultsService, messageService } from '../services/api';
+import type { AttendanceRecord, SwimmingResult, Message, RecoveryCredit, RecoveryRequest } from '../types';
+import { attendanceService, resultsService, messageService, recoveryService, recoveryRequestService } from '../services/api';
 
 export const StudentDashboard: React.FC = () => {
     const { user } = useAuth();
@@ -26,12 +26,23 @@ export const StudentDashboard: React.FC = () => {
     const [attendanceMonthInitialized, setAttendanceMonthInitialized] = useState(false);
     const [savingAttendanceDate, setSavingAttendanceDate] = useState<string | null>(null);
     const [attendanceFeedback, setAttendanceFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+    const [recoveryCredits, setRecoveryCredits] = useState<RecoveryCredit[]>([]);
+    const [recoveryRequests, setRecoveryRequests] = useState<RecoveryRequest[]>([]);
+    const [recoveryMonth, setRecoveryMonth] = useState(() => {
+        const now = new Date();
+        return new Date(now.getFullYear(), now.getMonth(), 1);
+    });
+    const [selectedRecoveryDate, setSelectedRecoveryDate] = useState<string | null>(null);
+    const [recoveryFeedback, setRecoveryFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+    const [isSubmittingRecoveryRequest, setIsSubmittingRecoveryRequest] = useState(false);
 
     useEffect(() => {
         if (user) {
             attendanceService.getByStudent(user.id).then(setAttendance);
             resultsService.getByStudent(user.id).then(setResults);
             messageService.getByUser(user.id).then(setMessages);
+            recoveryService.getByStudent(user.id).then(setRecoveryCredits);
+            recoveryRequestService.getByStudent(user.id).then(setRecoveryRequests);
         }
     }, [user]);
 
@@ -44,7 +55,11 @@ export const StudentDashboard: React.FC = () => {
     }, [user]);
 
     const upcoming = myBookings.filter(b => b.status === 'upcoming');
-    const recoverySessions = attendance.filter(a => a.status === 'recovery');
+    const activeRecoveryCredits = recoveryCredits.filter(c => c.status === 'active');
+    const pendingRecoveryRequests = recoveryRequests.filter(r => r.status === 'pending');
+    const confirmedRecoveryRequests = recoveryRequests.filter(r => r.status === 'confirmed');
+    const usedRecoveryCredits = pendingRecoveryRequests.length + confirmedRecoveryRequests.length;
+    const availableRecoveryCredits = Math.max(0, activeRecoveryCredits.length - usedRecoveryCredits);
 
     const mySubscription = mockSubscriptions.find(s => s.studentId === user?.id);
     const matchedPlan = mySubscription ? subscriptionPlans.find(p => p.id === mySubscription.planId) : null;
@@ -180,6 +195,65 @@ export const StudentDashboard: React.FC = () => {
     }, [attendanceMonth]);
 
     const monthLabel = attendanceMonth.toLocaleDateString(locale, { month: 'long', year: 'numeric' });
+    const recoveryMonthLabel = recoveryMonth.toLocaleDateString(locale, { month: 'long', year: 'numeric' });
+
+    const recoveryDaysInMonth = useMemo(() => {
+        const year = recoveryMonth.getFullYear();
+        const month = recoveryMonth.getMonth();
+        return new Date(year, month + 1, 0).getDate();
+    }, [recoveryMonth]);
+
+    const recoveryFirstDayOffset = useMemo(() => {
+        const firstDay = new Date(recoveryMonth.getFullYear(), recoveryMonth.getMonth(), 1).getDay();
+        return firstDay === 0 ? 6 : firstDay - 1;
+    }, [recoveryMonth]);
+
+    const trainingDateSet = useMemo(() => new Set(trainingBookings.map(b => b.date)), [trainingBookings]);
+    const recoveryRequestByDate = useMemo(() => {
+        const map = new Map<string, RecoveryRequest>();
+        recoveryRequests.forEach(request => {
+            const existing = map.get(request.date);
+            if (!existing || existing.status === 'pending') {
+                map.set(request.date, request);
+            }
+        });
+        return map;
+    }, [recoveryRequests]);
+
+    const isRecoveryDateSelectable = (isoDate: string) => {
+        if (availableRecoveryCredits <= 0) return false;
+        if (recoveryRequestByDate.has(isoDate)) return false;
+        if (trainingDateSet.has(isoDate)) return false;
+        const date = new Date(`${isoDate}T00:00:00`);
+        const today = new Date();
+        const start = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        const maxDate = new Date(start);
+        maxDate.setDate(maxDate.getDate() + 45);
+        const day = date.getDay();
+        const isWeekend = day === 0 || day === 6;
+        return date >= start && date <= maxDate && !isWeekend;
+    };
+
+    const handleCreateRecoveryRequest = async () => {
+        if (!user) return;
+        if (!selectedRecoveryDate) {
+            setRecoveryFeedback({ type: 'error', message: t('student_dashboard.recovery.select_date_error') });
+            return;
+        }
+        if (!isRecoveryDateSelectable(selectedRecoveryDate)) {
+            setRecoveryFeedback({ type: 'error', message: t('student_dashboard.recovery.date_not_available') });
+            return;
+        }
+        setIsSubmittingRecoveryRequest(true);
+        const created = await recoveryRequestService.create({
+            studentId: user.id,
+            date: selectedRecoveryDate,
+        });
+        setRecoveryRequests(prev => [...prev, created]);
+        setSelectedRecoveryDate(null);
+        setRecoveryFeedback({ type: 'success', message: t('student_dashboard.recovery.request_sent') });
+        setIsSubmittingRecoveryRequest(false);
+    };
 
     useEffect(() => {
         if (attendanceMonthInitialized || trainingBookings.length === 0) return;
@@ -673,33 +747,177 @@ export const StudentDashboard: React.FC = () => {
 
                     {/* Recovery Tab */}
                     {activeTab === 'recovery' && (
-                        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden">
-                            <div className="p-6 border-b border-gray-100 dark:border-gray-700 flex items-center space-x-3">
-                                <RotateCcw className="text-yellow-500" size={24} />
-                                <h2 className="text-xl font-bold text-gray-800 dark:text-white">{t('student_dashboard.recovery.title')}</h2>
-                            </div>
-                            {recoverySessions.length > 0 ? (
-                                <div className="divide-y divide-gray-100 dark:divide-gray-700">
-                                    {recoverySessions.map(r => (
-                                        <div key={r.id} className="p-6 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                                            <div className="flex items-center space-x-4">
-                                                <div className="p-2 bg-yellow-100 rounded-full text-yellow-600">
-                                                    <RotateCcw size={20} />
-                                                </div>
-                                                <div>
-                                                    <div className="font-bold text-gray-800 dark:text-gray-200">{r.date}</div>
-                                                    <div className="text-xs text-gray-500">{t('student_dashboard.recovery.session')}</div>
-                                                </div>
-                                            </div>
-                                            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-yellow-100 text-yellow-700">
-                                                {t('student_dashboard.recovery.title')}
-                                            </span>
-                                        </div>
-                                    ))}
+                        <div className="space-y-6">
+                            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden">
+                                <div className="p-6 border-b border-gray-100 dark:border-gray-700 flex items-center space-x-3">
+                                    <RotateCcw className="text-yellow-500" size={24} />
+                                    <h2 className="text-xl font-bold text-gray-800 dark:text-white">{t('student_dashboard.recovery.title')}</h2>
                                 </div>
-                            ) : (
-                                <div className="p-12 text-center text-gray-500">{t('student_dashboard.recovery.no_sessions')}</div>
-                            )}
+                                <div className="p-6 space-y-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                        <div className="rounded-lg border border-yellow-200 bg-yellow-50 px-4 py-3">
+                                            <div className="text-xs font-bold uppercase tracking-wider text-yellow-700">
+                                                {t('student_dashboard.recovery.active_credits')}
+                                            </div>
+                                            <div className="text-2xl font-extrabold text-yellow-700">{availableRecoveryCredits}</div>
+                                        </div>
+                                        <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3">
+                                            <div className="text-xs font-bold uppercase tracking-wider text-amber-700">
+                                                {t('student_dashboard.recovery.pending_requests')}
+                                            </div>
+                                            <div className="text-2xl font-extrabold text-amber-700">{pendingRecoveryRequests.length}</div>
+                                        </div>
+                                        <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3">
+                                            <div className="text-xs font-bold uppercase tracking-wider text-emerald-700">
+                                                {t('student_dashboard.recovery.confirmed_requests')}
+                                            </div>
+                                            <div className="text-2xl font-extrabold text-emerald-700">{confirmedRecoveryRequests.length}</div>
+                                        </div>
+                                    </div>
+
+                                    <div className="text-sm text-gray-600 dark:text-gray-300">
+                                        {t('student_dashboard.recovery.instructions')}
+                                    </div>
+
+                                    <div className="flex items-center justify-between gap-3">
+                                        <button
+                                            type="button"
+                                            onClick={() => setRecoveryMonth(new Date(recoveryMonth.getFullYear(), recoveryMonth.getMonth() - 1, 1))}
+                                            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                        >
+                                            <ChevronLeft size={18} />
+                                        </button>
+                                        <div className="font-bold text-gray-800 dark:text-white capitalize">{recoveryMonthLabel}</div>
+                                        <button
+                                            type="button"
+                                            onClick={() => setRecoveryMonth(new Date(recoveryMonth.getFullYear(), recoveryMonth.getMonth() + 1, 1))}
+                                            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                        >
+                                            <ChevronRight size={18} />
+                                        </button>
+                                    </div>
+
+                                    <div className="grid grid-cols-7 gap-2 mb-2">
+                                        {weekdays.map(day => (
+                                            <div key={`recovery-${day}`} className="text-center text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 py-2">
+                                                {day}
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className="grid grid-cols-7 gap-2">
+                                        {Array.from({ length: recoveryFirstDayOffset }).map((_, index) => (
+                                            <div key={`recovery-empty-${index}`} className="min-h-20 rounded-lg bg-gray-50/60 dark:bg-gray-900/40" />
+                                        ))}
+                                        {Array.from({ length: recoveryDaysInMonth }, (_, index) => {
+                                            const day = index + 1;
+                                            const isoDate = `${recoveryMonth.getFullYear()}-${String(recoveryMonth.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                                            const request = recoveryRequestByDate.get(isoDate);
+                                            const isSelectable = isRecoveryDateSelectable(isoDate);
+                                            const isSelected = selectedRecoveryDate === isoDate;
+
+                                            return (
+                                                <button
+                                                    key={isoDate}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        if (!isSelectable) return;
+                                                        setSelectedRecoveryDate(isoDate);
+                                                        setRecoveryFeedback(null);
+                                                    }}
+                                                    disabled={!isSelectable}
+                                                    className={clsx(
+                                                        "min-h-20 rounded-lg border text-left p-2 transition-colors",
+                                                        request?.status === 'pending' && "border-amber-300 bg-amber-50 text-amber-800",
+                                                        request?.status === 'confirmed' && "border-emerald-300 bg-emerald-50 text-emerald-800",
+                                                        request?.status === 'rejected' && "border-red-300 bg-red-50 text-red-800",
+                                                        !request && isSelectable && (isSelected
+                                                            ? "border-host-cyan bg-cyan-50 text-host-cyan"
+                                                            : "border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:border-host-cyan"),
+                                                        !request && !isSelectable && "border-gray-100 bg-gray-50 text-gray-400 dark:border-gray-700 dark:bg-gray-800/40 dark:text-gray-500"
+                                                    )}
+                                                >
+                                                    <div className="text-sm font-bold">{day}</div>
+                                                    {request && (
+                                                        <div className="mt-1 text-[10px] font-bold uppercase tracking-wide">
+                                                            {request.status === 'pending' && t('student_dashboard.recovery.status_pending')}
+                                                            {request.status === 'confirmed' && t('student_dashboard.recovery.status_confirmed')}
+                                                            {request.status === 'rejected' && t('student_dashboard.recovery.status_rejected')}
+                                                        </div>
+                                                    )}
+                                                    {!request && isSelectable && (
+                                                        <div className="mt-1 text-[10px] font-bold uppercase tracking-wide text-host-cyan">
+                                                            {t('student_dashboard.recovery.available')}
+                                                        </div>
+                                                    )}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+
+                                    <div className="flex flex-col md:flex-row md:items-center gap-3">
+                                        <div className="text-sm text-gray-600 dark:text-gray-300">
+                                            {selectedRecoveryDate
+                                                ? t('student_dashboard.recovery.selected_date', { date: selectedRecoveryDate })
+                                                : t('student_dashboard.recovery.no_date_selected')}
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={handleCreateRecoveryRequest}
+                                            disabled={!selectedRecoveryDate || isSubmittingRecoveryRequest || availableRecoveryCredits <= 0}
+                                            className="md:ml-auto px-4 py-2 rounded-lg bg-host-cyan text-white text-sm font-bold hover:bg-host-blue transition-colors disabled:opacity-60"
+                                        >
+                                            {isSubmittingRecoveryRequest
+                                                ? t('student_dashboard.recovery.sending')
+                                                : t('student_dashboard.recovery.send_request')}
+                                        </button>
+                                    </div>
+
+                                    {recoveryFeedback && (
+                                        <div className={clsx(
+                                            "text-sm font-semibold",
+                                            recoveryFeedback.type === 'success' ? "text-emerald-600" : "text-red-600"
+                                        )}>
+                                            {recoveryFeedback.message}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden">
+                                <div className="p-6 border-b border-gray-100 dark:border-gray-700">
+                                    <h3 className="text-lg font-bold text-gray-800 dark:text-white">{t('student_dashboard.recovery.requests_title')}</h3>
+                                </div>
+                                {recoveryRequests.length > 0 ? (
+                                    <div className="divide-y divide-gray-100 dark:divide-gray-700">
+                                        {recoveryRequests
+                                            .slice()
+                                            .sort((a, b) => b.date.localeCompare(a.date))
+                                            .map(request => (
+                                                <div key={request.id} className="p-4 flex items-center justify-between">
+                                                    <div>
+                                                        <div className="font-bold text-gray-800 dark:text-gray-200">{request.date}</div>
+                                                        <div className="text-xs text-gray-500">
+                                                            {t('student_dashboard.recovery.request_made')}: {new Date(request.requestedAt).toLocaleDateString(locale)}
+                                                        </div>
+                                                    </div>
+                                                    <span className={clsx(
+                                                        "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide",
+                                                        request.status === 'pending' && "bg-amber-100 text-amber-700",
+                                                        request.status === 'confirmed' && "bg-emerald-100 text-emerald-700",
+                                                        request.status === 'rejected' && "bg-red-100 text-red-700"
+                                                    )}>
+                                                        {request.status === 'pending' && t('student_dashboard.recovery.status_pending')}
+                                                        {request.status === 'confirmed' && t('student_dashboard.recovery.status_confirmed')}
+                                                        {request.status === 'rejected' && t('student_dashboard.recovery.status_rejected')}
+                                                    </span>
+                                                </div>
+                                            ))}
+                                    </div>
+                                ) : (
+                                    <div className="p-8 text-sm text-gray-500">{t('student_dashboard.recovery.no_requests')}</div>
+                                )}
+                            </div>
                         </div>
                     )}
 

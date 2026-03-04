@@ -224,7 +224,25 @@
         "recovery": {
             "title": "Sesiuni de Recuperare",
             "session": "Sesiune de recuperare",
-            "no_sessions": "Nu există sesiuni de recuperare programate."
+            "no_sessions": "Nu există sesiuni de recuperare programate.",
+            "active_credits": "Credite disponibile",
+            "pending_requests": "Cereri în așteptare",
+            "confirmed_requests": "Cereri confirmate",
+            "instructions": "Alege o zi disponibilă din calendar și trimite cererea de recuperare. Cererea va fi confirmată ulterior de profesor.",
+            "available": "disponibil",
+            "selected_date": "Data selectată: {{date}}",
+            "no_date_selected": "Nu ai selectat încă o dată.",
+            "send_request": "Trimite cerere recuperare",
+            "sending": "Se trimite...",
+            "request_sent": "Cererea de recuperare a fost trimisă și este în așteptare.",
+            "select_date_error": "Selectează o dată disponibilă.",
+            "date_not_available": "Data selectată nu este disponibilă pentru recuperare.",
+            "requests_title": "Cereri de recuperare",
+            "request_made": "Solicitat la",
+            "no_requests": "Nu ai încă cereri de recuperare.",
+            "status_pending": "în așteptare",
+            "status_confirmed": "confirmată",
+            "status_rejected": "respinsă"
         },
         "messages": {
             "title": "Mesaje",
@@ -307,7 +325,13 @@
         },
         "recovery": {
             "title": "Elevi la Recuperare",
-            "no_students": "Nu există elevi la recuperare."
+            "no_students": "Nu există elevi la recuperare.",
+            "pending_requests": "Cereri recuperare în așteptare",
+            "no_pending_requests": "Nu există cereri noi de recuperare.",
+            "confirm_request": "Confirmă recuperarea",
+            "request_confirmed": "Recuperarea a fost confirmată pentru {{date}} și apare în calendar.",
+            "request_confirm_error": "Nu am putut confirma cererea de recuperare.",
+            "in_calendar": "În calendar"
         },
         "individual": {
             "title": "Sesiuni Individuale",

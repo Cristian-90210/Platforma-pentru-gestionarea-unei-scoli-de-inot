@@ -134,6 +134,16 @@ export interface RecoveryCredit {
     consumedSessionId?: string;
 }
 
+export interface RecoveryRequest {
+    id: string;
+    studentId: string;
+    date: string;
+    status: 'pending' | 'confirmed' | 'rejected';
+    requestedAt: string;
+    confirmedBy?: string;
+    confirmedAt?: string;
+}
+
 export interface ProgressSnapshot {
     id: string;
     studentId: string;

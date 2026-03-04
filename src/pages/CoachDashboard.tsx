@@ -5,8 +5,8 @@ import { Calendar, CheckCircle, Clock, RotateCcw, Trophy, MessageCircle, Send, U
 import { PageHeader } from '../components/PageHeader';
 import { clsx } from 'clsx';
 import { useTranslation } from 'react-i18next';
-import type { AttendanceRecord, SwimmingResult, Message, SwimStyle, SwimDistance, StudentHealthFlag, ProgressSnapshot, RecoveryCredit } from '../types';
-import { attendanceService, resultsService, messageService, scheduleService, healthService, progressService, recoveryService } from '../services/api';
+import type { AttendanceRecord, SwimmingResult, Message, SwimStyle, SwimDistance, StudentHealthFlag, ProgressSnapshot, RecoveryCredit, RecoveryRequest } from '../types';
+import { attendanceService, resultsService, messageService, scheduleService, healthService, progressService, recoveryService, recoveryRequestService } from '../services/api';
 import type { CoachScheduleSlot } from '../types';
 
 export const CoachDashboard: React.FC = () => {
@@ -22,6 +22,7 @@ export const CoachDashboard: React.FC = () => {
     const [healthFlags, setHealthFlags] = useState<StudentHealthFlag[]>([]);
     const [progressSnapshots, setProgressSnapshots] = useState<ProgressSnapshot[]>([]);
     const [recoveryCredits, setRecoveryCredits] = useState<RecoveryCredit[]>([]);
+    const [recoveryRequests, setRecoveryRequests] = useState<RecoveryRequest[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [selectedParent, setSelectedParent] = useState('user-1');
     const [activeTab, setActiveTab] = useState<'schedule' | 'attendance' | 'results' | 'messages' | 'recovery' | 'individual' | 'count'>('schedule');
@@ -30,6 +31,7 @@ export const CoachDashboard: React.FC = () => {
     const [attendanceMode, setAttendanceMode] = useState<'group' | 'individual'>('group');
     const [attendanceConfirmationFeedback, setAttendanceConfirmationFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
     const [sessionConfirmationFeedback, setSessionConfirmationFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+    const [recoveryRequestFeedback, setRecoveryRequestFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
     // Results form state
     const [resultForm, setResultForm] = useState({
@@ -47,6 +49,7 @@ export const CoachDashboard: React.FC = () => {
         healthService.getAll().then(setHealthFlags);
         progressService.getAllLatest().then(setProgressSnapshots);
         recoveryService.getAll().then(setRecoveryCredits);
+        recoveryRequestService.getAll().then(setRecoveryRequests);
     }, [coachId]);
 
     const buildHourlyRange = (startHour: number, endHour: number) => {
@@ -88,7 +91,55 @@ export const CoachDashboard: React.FC = () => {
     }, [coachId]);
 
     const today = new Date().toISOString().split('T')[0];
-    const todaysSessions = schedule.filter(s => s.date === today);
+    const coachedStudentIds = useMemo(() => new Set(schedule.map(s => s.studentId)), [schedule]);
+
+    const pendingRecoveryRequests = useMemo(() => {
+        return recoveryRequests
+            .filter(r => r.status === 'pending')
+            .filter(r => coachedStudentIds.has(r.studentId))
+            .sort((a, b) => a.date.localeCompare(b.date));
+    }, [recoveryRequests, coachedStudentIds]);
+
+    const confirmedRecoveryRequests = useMemo(() => {
+        return recoveryRequests
+            .filter(r => r.status === 'confirmed')
+            .filter(r => coachedStudentIds.has(r.studentId))
+            .sort((a, b) => a.date.localeCompare(b.date));
+    }, [recoveryRequests, coachedStudentIds]);
+
+    const scheduleCalendarEntries = useMemo(() => {
+        const baseEntries = schedule.map(session => ({
+            id: session.id,
+            date: session.date,
+            time: session.time,
+            studentName: session.student.name,
+            studentLevel: session.student.level,
+            courseLabel: session.course ? t(`courses.${session.course.id}.title`) : session.courseId,
+            status: session.status,
+            isRecovery: false,
+            sortTs: new Date(`${session.date}T${session.time}`).getTime(),
+        }));
+
+        const recoveryEntries = confirmedRecoveryRequests.map(request => {
+            const student = mockStudents.find(s => s.id === request.studentId);
+            const recoveryTime = '18:00';
+            return {
+                id: `recovery-${request.id}`,
+                date: request.date,
+                time: recoveryTime,
+                studentName: student?.name ?? request.studentId,
+                studentLevel: student?.level ?? 'N/A',
+                courseLabel: t('coach_dashboard.attendance.recovery'),
+                status: 'recovery_confirmed',
+                isRecovery: true,
+                sortTs: new Date(`${request.date}T${recoveryTime}`).getTime(),
+            };
+        });
+
+        return [...baseEntries, ...recoveryEntries].sort((a, b) => a.sortTs - b.sortTs);
+    }, [schedule, confirmedRecoveryRequests, t]);
+
+    const todaysSessions = scheduleCalendarEntries.filter(s => s.date === today);
     const recoverySessions = attendance.filter(a => a.status === 'recovery');
     const individualSessions = schedule.filter(s => {
         const sameDateSessions = schedule.filter(ss => ss.date === s.date && ss.time === s.time);
@@ -223,6 +274,22 @@ export const CoachDashboard: React.FC = () => {
         });
         setMessages(prev => [...prev, sent]);
         setNewMessage('');
+    };
+
+    const handleConfirmRecoveryRequest = async (request: RecoveryRequest) => {
+        try {
+            const confirmed = await recoveryRequestService.confirm(request.id, coachId);
+            setRecoveryRequests(prev => prev.map(r => (r.id === request.id ? confirmed : r)));
+            setRecoveryRequestFeedback({
+                type: 'success',
+                message: t('coach_dashboard.recovery.request_confirmed', { date: confirmed.date }),
+            });
+        } catch {
+            setRecoveryRequestFeedback({
+                type: 'error',
+                message: t('coach_dashboard.recovery.request_confirm_error'),
+            });
+        }
     };
 
     // Count students per time slot
@@ -455,7 +522,7 @@ export const CoachDashboard: React.FC = () => {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-                                    {schedule.map((session) => (
+                                    {scheduleCalendarEntries.map((session) => (
                                         <tr key={session.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors group">
                                             <td className="p-6">
                                                 <div className="font-bold text-gray-800 dark:text-white flex items-center">
@@ -466,26 +533,36 @@ export const CoachDashboard: React.FC = () => {
                                                 </div>
                                             </td>
                                             <td className="p-6">
-                                                <div className="font-medium text-gray-800 dark:text-gray-200">{session.student.name}</div>
-                                                <div className="text-xs text-gray-500">{session.student.level}</div>
+                                                <div className="font-medium text-gray-800 dark:text-gray-200">{session.studentName}</div>
+                                                <div className="text-xs text-gray-500">{session.studentLevel}</div>
                                             </td>
                                             <td className="p-6">
                                                 <span className="inline-block px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
-                                                    {session.course ? t(`courses.${session.course.id}.title`) : session.courseId}
+                                                    {session.courseLabel}
                                                 </span>
                                             </td>
                                             <td className="p-6">
                                                 <span className={clsx(
                                                     "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide",
-                                                    session.status === 'upcoming' ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
+                                                    session.status === 'upcoming'
+                                                        ? "bg-green-100 text-green-700"
+                                                        : session.isRecovery
+                                                            ? "bg-yellow-100 text-yellow-700"
+                                                            : "bg-gray-100 text-gray-500"
                                                 )}>
-                                                    {session.status}
+                                                    {session.isRecovery ? t('coach_dashboard.attendance.recovery') : session.status}
                                                 </span>
                                             </td>
                                             <td className="p-6 text-right">
-                                                <button className="text-gray-400 hover:text-host-cyan transition-colors">
-                                                    <CheckCircle size={20} />
-                                                </button>
+                                                {session.isRecovery ? (
+                                                    <span className="text-xs font-bold text-yellow-700 bg-yellow-100 px-3 py-1 rounded-full">
+                                                        {t('coach_dashboard.recovery.in_calendar')}
+                                                    </span>
+                                                ) : (
+                                                    <button className="text-gray-400 hover:text-host-cyan transition-colors">
+                                                        <CheckCircle size={20} />
+                                                    </button>
+                                                )}
                                             </td>
                                         </tr>
                                     ))}
@@ -978,36 +1055,82 @@ export const CoachDashboard: React.FC = () => {
 
                 {/* Recovery Tab */}
                 {activeTab === 'recovery' && (
-                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden">
-                        <div className="p-6 border-b border-gray-100 dark:border-gray-700 flex items-center space-x-3">
-                            <RotateCcw className="text-yellow-500" size={24} />
-                            <h2 className="text-xl font-bold text-gray-800 dark:text-white">{t('coach_dashboard.recovery.title')}</h2>
-                        </div>
-                        {recoverySessions.length > 0 ? (
-                            <div className="divide-y divide-gray-100 dark:divide-gray-700">
-                                {recoverySessions.map(r => {
-                                    const student = mockStudents.find(s => s.id === r.studentId);
-                                    return (
-                                        <div key={r.id} className="p-6 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                                            <div className="flex items-center space-x-4">
-                                                <div className="p-2 bg-yellow-100 rounded-full text-yellow-600">
-                                                    <RotateCcw size={20} />
-                                                </div>
-                                                <div>
-                                                    <div className="font-bold text-gray-800 dark:text-gray-200">{student?.name || r.studentId}</div>
-                                                    <div className="text-xs text-gray-500">{r.date}</div>
-                                                </div>
-                                            </div>
-                                            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-yellow-100 text-yellow-700">
-                                                {t('coach_dashboard.attendance.recovery')}
-                                            </span>
-                                        </div>
-                                    );
-                                })}
+                    <div className="space-y-6">
+                        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                            <div className="p-6 border-b border-gray-100 dark:border-gray-700 flex items-center space-x-3">
+                                <RotateCcw className="text-yellow-500" size={24} />
+                                <h2 className="text-xl font-bold text-gray-800 dark:text-white">{t('coach_dashboard.recovery.pending_requests')}</h2>
                             </div>
-                        ) : (
-                            <div className="p-12 text-center text-gray-500">{t('coach_dashboard.recovery.no_students')}</div>
-                        )}
+                            {pendingRecoveryRequests.length > 0 ? (
+                                <div className="divide-y divide-gray-100 dark:divide-gray-700">
+                                    {pendingRecoveryRequests.map(request => {
+                                        const student = mockStudents.find(s => s.id === request.studentId);
+                                        return (
+                                            <div key={request.id} className="p-6 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                                <div className="flex items-center space-x-4">
+                                                    <div className="p-2 bg-amber-100 rounded-full text-amber-600">
+                                                        <RotateCcw size={20} />
+                                                    </div>
+                                                    <div>
+                                                        <div className="font-bold text-gray-800 dark:text-gray-200">{student?.name || request.studentId}</div>
+                                                        <div className="text-xs text-gray-500">{request.date}</div>
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleConfirmRecoveryRequest(request)}
+                                                    className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-host-cyan text-white hover:bg-host-blue transition-colors"
+                                                >
+                                                    {t('coach_dashboard.recovery.confirm_request')}
+                                                </button>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            ) : (
+                                <div className="p-12 text-center text-gray-500">{t('coach_dashboard.recovery.no_pending_requests')}</div>
+                            )}
+                            {recoveryRequestFeedback && (
+                                <div className={clsx(
+                                    "px-6 pb-6 text-sm font-semibold",
+                                    recoveryRequestFeedback.type === 'success' ? "text-emerald-700 dark:text-emerald-300" : "text-red-700 dark:text-red-300"
+                                )}>
+                                    {recoveryRequestFeedback.message}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                            <div className="p-6 border-b border-gray-100 dark:border-gray-700 flex items-center space-x-3">
+                                <RotateCcw className="text-yellow-500" size={24} />
+                                <h2 className="text-xl font-bold text-gray-800 dark:text-white">{t('coach_dashboard.recovery.title')}</h2>
+                            </div>
+                            {recoverySessions.length > 0 ? (
+                                <div className="divide-y divide-gray-100 dark:divide-gray-700">
+                                    {recoverySessions.map(r => {
+                                        const student = mockStudents.find(s => s.id === r.studentId);
+                                        return (
+                                            <div key={r.id} className="p-6 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                                <div className="flex items-center space-x-4">
+                                                    <div className="p-2 bg-yellow-100 rounded-full text-yellow-600">
+                                                        <RotateCcw size={20} />
+                                                    </div>
+                                                    <div>
+                                                        <div className="font-bold text-gray-800 dark:text-gray-200">{student?.name || r.studentId}</div>
+                                                        <div className="text-xs text-gray-500">{r.date}</div>
+                                                    </div>
+                                                </div>
+                                                <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-yellow-100 text-yellow-700">
+                                                    {t('coach_dashboard.attendance.recovery')}
+                                                </span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            ) : (
+                                <div className="p-12 text-center text-gray-500">{t('coach_dashboard.recovery.no_students')}</div>
+                            )}
+                        </div>
                     </div>
                 )}
 
